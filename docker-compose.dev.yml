@@ -1,0 +1,138 @@
+version: "3.9"
+
+services:
+  app-server:
+    build:
+      context: ./app-server
+      dockerfile: Dockerfile.dev
+    container_name: chess-game_app-server
+    hostname: app-server
+    restart: unless-stopped
+    env_file:
+      - ./env/app-server.dev.env
+    volumes:
+      - type: bind
+        source: ./app-server
+        target: /home/node/app
+      - /home/node/app/node_modules
+    depends_on:
+      - redis
+    networks:
+      - chess-game
+
+  socket-server:
+    build:
+      context: ./socket-server
+      dockerfile: Dockerfile.dev
+    container_name: chess-game_socket-server
+    hostname: socket-server
+    restart: unless-stopped
+    # ports:
+    #   - "3001:3001"
+    env_file:
+      - ./env/socket-server.dev.env
+    volumes:
+      - type: bind
+        source: ./socket-server
+        target: /home/node/app
+      - /home/node/app/node_modules
+    depends_on:
+      - redis
+    networks:
+      - chess-game
+
+  # couchdb:
+  #   image: couchdb:latest
+  #   container_name: couchdb
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5984:5984"
+  #   environment:
+  #     - COUCHDB_USER=admin
+  #     - COUCHDB_PASSWORD=couchdb12345
+  #   volumes:
+  #     - couchdb-data:/opt/couchdb/data
+  #   logging:
+  #       driver: none
+  #       options:
+  #         syslog-address: "tcp://0.0.0.0:1234"
+  #   networks:
+  #     - chess-game
+
+  redis:
+    image: redis:alpine
+    container_name: chess-game_redis
+    hostname: redis
+    restart: unless-stopped
+    command: "redis-server /usr/local/etc/redis/redis.conf"
+    volumes:
+      - type: volume
+        source: redis-data
+        target: /data
+      - type: bind
+        source: ./docker/redis-conf
+        target: /usr/local/etc/redis
+        read_only: true
+    logging:
+      driver: none
+    networks:
+      - chess-game
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: chess-game_redisinsight
+    hostname: redisinsight
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    volumes:
+      - type: volume
+        source: redisinsight-data
+        target: /db
+      - type: bind
+        source: ./docker/redis-conf
+        target: /usr/local/etc/redis/
+        read_only: true
+    depends_on:
+      - redis
+    logging:
+      driver: none
+    networks:
+      - chess-game
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: chess-game_nginx
+    hostname: nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    env_file:
+      - ./env/nginx.dev.env
+    volumes:
+      - type: bind
+        source: ./docker/nginx-conf
+        target: /etc/nginx/templates
+        read_only: true
+      - type: bind
+        source: ./docker/logs/nginx
+        target: /var/log/nginx
+    depends_on:
+      - app-server
+      - socket-server
+    networks:
+      - chess-game
+
+volumes:
+  redis-data:
+    name: chess-game_redis
+
+  redisinsight-data:
+    name: chess-game_redisinsight
+
+  # couchdb-data:
+  #   name: couchdb
+
+networks:
+  chess-game:
+    driver: bridge

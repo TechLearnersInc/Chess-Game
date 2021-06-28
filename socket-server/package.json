@@ -1,0 +1,31 @@
+{
+  "name": "socket-server",
+  "version": "1.0.0",
+  "description": "This a peer-to-peer online Chase game where two persons can play simultaneously.",
+  "main": "./bin/www",
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
+  },
+  "author": "TechLearners",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechLearnersInc/Chess-Game.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TechLearnersInc/Chess-Game/issues"
+  },
+  "homepage": "https://github.com/TechLearnersInc/Chess-Game",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "debug": "~4.3.1",
+    "ioredis": "^4.27.6",
+    "jsonwebtoken": "^8.5.1",
+    "socket.io": "^4.1.2",
+    "socketio-jwt": "^4.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

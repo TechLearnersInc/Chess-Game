@@ -1,0 +1,32 @@
+{
+  "folders": [
+    {
+      "name": "root",
+      "path": "."
+    },
+    {
+      "name": "app-server",
+      "path": "app-server",
+    },
+    {
+      "name": "socket-server",
+      "path": "socket-server"
+    },
+  ],
+  "settings": {
+    "files.exclude": {
+      "node_modules/": true,
+      "app-server/": true,
+      "socket-server/": true
+    },
+    "files.associations": {
+      "*.conf": "plaintext"
+    },
+    "npm.autoDetect": "on",
+    "npm.exclude": [
+      "**/app-server**",
+      "**/socket-server**"
+    ],
+    "terminal.integrated.cwd": "${workspaceFolder}",
+  }
+}

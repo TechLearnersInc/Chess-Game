@@ -1,0 +1,150 @@
+button.btn-modal {
+  background: #745429 !important;
+  border: 2px solid #35231a !important;
+  width: 64px !important;
+  height: 36px !important;
+  font-family: Alatsi, sans-serif !important;
+  font-size: 15pt !important;
+  border-radius: 4px !important;
+  padding: 0px !important;
+  font-weight: normal !important;
+  text-align: center !important;
+  -webkit-filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1)) !important;
+  filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1)) !important;
+}
+button.btn-modal:hover {
+  background: rgba(116, 84, 41, 0.9) !important;
+  border-color: #87612e !important;
+  border-radius: 4px !important;
+}
+button.btn-modal:active, button.btn-menu:focus {
+  background: rgba(116, 84, 41, 0.9) !important;
+  border-color: #87612e !important;
+  border-width: 4px !important;
+  border-color: #35231a !important;
+}
+
+button.close-btn-modal {
+  background: #616161 !important;
+  border: 2px solid #494949 !important;
+  color: white !important;
+  width: 64px !important;
+  height: 36px !important;
+  font-family: Alatsi !important;
+  font-size: 14pt !important;
+  border-radius: 4px !important;
+  padding: 0px !important;
+  font-weight: normal !important;
+  text-align: center !important;
+  -webkit-filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1)) !important;
+  filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1)) !important;
+}
+button.close-btn-modal:hover {
+  background: rgba(97, 97, 97, 0.9) !important;
+  border-color: #616161 !important;
+  border-radius: 4px !important;
+}
+button.close-btn-modal:active, button.btn-menu:focus {
+  background: rgba(97, 97, 97, 0.9) !important;
+  border-color: #616161 !important;
+  border-width: 4px !important;
+  border-color: #494949 !important;
+}
+
+.join-game-modal .custom-modal-content {
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: #455a64 !important;
+  border-radius: 8px !important;
+  -webkit-filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.5)) !important;
+  filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.5)) !important;
+}
+.join-game-modal .custom-modal-content .modal-body {
+  text-align: center;
+}
+.join-game-modal .custom-modal-content h4 {
+  font-family: Alatsi, sans-serif !important;
+}
+.join-game-modal .custom-modal-content .row {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+.join-game-modal .custom-modal-content input.join-game-code-input {
+  font-family: Aldrich, sans-serif !important;
+  font-weight: normal !important;
+  color: #3e2723 !important;
+  text-align: center !important;
+  font-size: 20pt !important;
+  border-style: none !important;
+  border-width: none !important;
+  border-color: none !important;
+  outline: none !important;
+}
+.join-game-modal .custom-modal-content input.join-game-pin-code {
+  font-family: Aldrich, sans-serif !important;
+  font-weight: normal !important;
+  color: #3e2723 !important;
+  text-align: center !important;
+  font-size: 12pt !important;
+  border-style: none !important;
+  border-width: none !important;
+  border-color: none !important;
+  outline: none !important;
+  max-width: 300px !important;
+  min-width: 250px !important;
+}
+.join-game-modal .custom-modal-content select.join-game-play-as {
+  font-family: ABeeZee, sans-serif !important;
+  font-weight: normal !important;
+  color: #757575 !important;
+  background-color: transparent !important;
+  text-align: center !important;
+  font-size: 18pt !important;
+  border-style: none !important;
+  border-width: none !important;
+  border-color: none !important;
+  outline: none !important;
+}
+.join-game-modal .custom-modal-content select.join-game-play-as option {
+  color: #3e2723 !important;
+}
+
+img.logo-header {
+  -webkit-filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1));
+  filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1));
+}
+
+button.btn-menu {
+  background: #745429 !important;
+  border: 2px solid #35231a !important;
+  width: 200px !important;
+  height: 46px !important;
+  font-family: Alatsi, sans-serif !important;
+  font-size: 16pt !important;
+  border-radius: 4px !important;
+  padding: 0px !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  -webkit-filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1)) !important;
+  filter: drop-shadow(1px 1px 5px rgba(53, 35, 26, 0.1)) !important;
+}
+button.btn-menu:hover {
+  background: rgba(116, 84, 41, 0.9) !important;
+  border-color: #87612e !important;
+  border-radius: 4px !important;
+}
+button.btn-menu:active, button.btn-menu:focus {
+  background: rgba(116, 84, 41, 0.9) !important;
+  border-color: #87612e !important;
+  border-width: 4px !important;
+  border-color: #35231a !important;
+}
+
+span.common-btn-label {
+  position: relative;
+  display: inline;
+  font-size: 20px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  padding-right: 10px;
+}

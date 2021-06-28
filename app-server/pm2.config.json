@@ -1,0 +1,18 @@
+{
+  "name": "app-server",
+  "interpreter": "node",
+  "script": "bin/www.js",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "autorestart": true,
+  "restart_delay": 2000,
+  "watch": false,
+  "wait_ready": true,
+  "instances": 20,
+  "exec_mode": "cluster",
+  "out_file": "logs/out.log",
+  "error_file": "logs/err.log",
+  "combine_logs": true,
+  "time": true
+}

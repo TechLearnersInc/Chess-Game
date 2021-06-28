@@ -1,0 +1,28 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+i.fa-facebook-f {
+  color: #3b5998;
+}
+i.fa-linkedin-in {
+  color: #0069bd;
+}
+i.fa-github {
+  color: #1d2329;
+}
+i.fa-telegram-plane {
+  color: #0093e8;
+}
+i.fa-youtube {
+  color: #dd0013;
+}
