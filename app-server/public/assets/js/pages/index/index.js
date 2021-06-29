@@ -44,7 +44,7 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
   notificationToastID.classList.remove('animate__fadeOutUp');
 });
 
-btnNewGame.addEventListener('click', async (event) => {
+btnNewGame.addEventListener('click', async event => {
   event.preventDefault();
 
   if (localStorage.getItem('gamecode') === null) {
@@ -66,7 +66,7 @@ btnNewGame.addEventListener('click', async (event) => {
   modalJoinGame.show();
 });
 
-btnJoinGame.addEventListener('click', (event) => {
+btnJoinGame.addEventListener('click', event => {
   event.preventDefault();
 
   joinGamePinCodeRow.style.display = 'block';
@@ -77,7 +77,7 @@ btnJoinGame.addEventListener('click', (event) => {
   modalJoinGame.show();
 });
 
-btnGameCodeSubmit.addEventListener('click', async (event) => {
+btnGameCodeSubmit.addEventListener('click', async event => {
   event.preventDefault();
 
   const gamecode = joinGameCodeInput.value;
@@ -157,11 +157,11 @@ async function newGamecodeRequest() {
       'csrf-token': csrfToken,
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
+    .then(response => response.json())
+    .then(data => {
       return data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error:', error);
       notification({
         title: 'Bad news!',
@@ -185,11 +185,11 @@ async function verifyAndGetTokenRequest(body) {
       playerPin: body.playerPin,
     }),
   })
-    .then((response) => response.json())
-    .then((data) => {
+    .then(response => response.json())
+    .then(data => {
       return data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error:', error);
       notification({
         title: 'Bad news!',
