@@ -2,25 +2,25 @@
  * https://chessboardjs.com/examples.html#5003
  */
 
-"use strict";
+'use strict';
 
 const game = new Chess();
-const whiteSquareGrey = "#a9a9a9";
-const blackSquareGrey = "#696969";
+const whiteSquareGrey = '#a9a9a9';
+const blackSquareGrey = '#696969';
 
 const removeGreySquares = () => {
-  $("#chess-board .square-55d63").css("background", "");
+  $('#chess-board .square-55d63').css('background', '');
 };
 
 const greySquare = (square) => {
-  let $square = $("#chess-board .square-" + square);
+  let $square = $('#chess-board .square-' + square);
 
   let background = whiteSquareGrey;
-  if ($square.hasClass("black-3c85d")) {
+  if ($square.hasClass('black-3c85d')) {
     background = blackSquareGrey;
   }
 
-  $square.css("background", background);
+  $square.css('background', background);
 };
 
 const onDragStart = (source, piece) => {
@@ -29,8 +29,8 @@ const onDragStart = (source, piece) => {
 
   // or if it's not that side's turn
   if (
-    (game.turn() === "w" && piece.search(/^b/) !== -1) ||
-    (game.turn() === "b" && piece.search(/^w/) !== -1)
+    (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+    (game.turn() === 'b' && piece.search(/^w/) !== -1)
   ) {
     return false;
   }
@@ -43,12 +43,12 @@ const onDrop = (source, target) => {
   const move = game.move({
     from: source,
     to: target,
-    promotion: "q", // NOTE: always promote to a queen for example simplicity
+    promotion: 'q', // NOTE: always promote to a queen for example simplicity
   });
 
   // illegal move
   if (move === null) {
-    return "snapback";
+    return 'snapback';
   }
 };
 
@@ -83,7 +83,7 @@ const onSnapEnd = () => {
 
 const board_config = {
   draggable: true,
-  position: "start",
+  position: 'start',
   onDragStart: onDragStart,
   onDrop: onDrop,
   onMouseoutSquare: onMouseoutSquare,

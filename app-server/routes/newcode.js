@@ -1,27 +1,27 @@
 /* Variables */
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { customAlphabet } = require("nanoid");
+const { customAlphabet } = require('nanoid');
 const nanoid = customAlphabet(process.env.NANOID_ALPHABET, 10);
 
 /* Redirection to Home */
-router.get("/", (req, res) => {
-  res.clearCookie("token");
-  res.redirect(302, "/");
+router.get('/', (req, res) => {
+  res.clearCookie('token');
+  res.redirect(302, '/');
 });
 
 /* New Gamecode Creation */
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   // Gamecode Variables
   const gamecode = nanoid();
   const fields = [
-    ...["gamecode", gamecode],
-    ...["white_joined", "false"],
-    ...["black_joined", "false"],
-    ...["white_pin", "false"],
-    ...["black_pin", "false"],
-    ...["fen", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
-    ...["turn", "white"],
+    ...['gamecode', gamecode],
+    ...['white_joined', 'false'],
+    ...['black_joined', 'false'],
+    ...['white_pin', 'false'],
+    ...['black_pin', 'false'],
+    ...['fen', 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'],
+    ...['turn', 'white'],
   ];
 
   // Redis Variables
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
     await redis.expire(gamecode, expiresIn); // Setting initial expiration
   } catch (err) {
     console.error(err);
-    res.clearCookie("token");
+    res.clearCookie('token');
     res.sendStatus(500);
     return;
   }

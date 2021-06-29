@@ -1,16 +1,16 @@
 /* Variables */
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const cookieOptions = {
   httpOnly: true,
   maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  sameSite: "strict",
-  secure: "true",
+  sameSite: 'strict',
+  secure: 'true',
 };
 
 /* Verify of Gamecode's validity and send JWT Token */
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   // Request variables
   let gamecode = req.body.gamecode; // Gamecode
   let player = req.body.player; // Which player
@@ -32,9 +32,9 @@ router.post("/", async (req, res) => {
     const gameData = await redis.hgetall(gamecode);
 
     // Checking gamecode's validity
-    if (gameData["gamecode"] === undefined) {
+    if (gameData['gamecode'] === undefined) {
       responseData.gamecodeValid = false;
-      res.clearCookie("token");
+      res.clearCookie('token');
       res.json(responseData);
       return;
     }
@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
     const player_pin = `${player}_pin`;
     if (gameData[player_pin] !== playerPin) {
       responseData.playerPin = false;
-      res.clearCookie("token");
+      res.clearCookie('token');
       res.json(responseData);
       return;
     }
@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
     await redis.expire(gamecode, expiresIn);
   } catch (err) {
     console.error(err);
-    res.clearCookie("token");
+    res.clearCookie('token');
     res.sendStatus(500);
     return;
   }
@@ -66,10 +66,10 @@ router.post("/", async (req, res) => {
   // JSON Web Token as Cookie
   try {
     const token = getNewToken({ gamecode, player });
-    res.cookie("token", token, cookieOptions);
+    res.cookie('token', token, cookieOptions);
   } catch (err) {
     console.error(err);
-    res.clearCookie("token");
+    res.clearCookie('token');
     res.sendStatus(500);
     return;
   }
@@ -82,8 +82,8 @@ function getNewToken(
   data,
   secret = process.env.SECRET_TOKEN,
   config = {
-    algorithm: "HS256",
-    expiresIn: "24h",
+    algorithm: 'HS256',
+    expiresIn: '24h',
   }
 ) {
   return jwt.sign(data, secret, config);

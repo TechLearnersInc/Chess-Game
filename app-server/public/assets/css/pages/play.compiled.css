@@ -17,7 +17,8 @@ button.btn-modal:hover {
   border-color: #87612e !important;
   border-radius: 4px !important;
 }
-button.btn-modal:active, button.btn-menu:focus {
+button.btn-modal:active,
+button.btn-menu:focus {
   background: rgba(116, 84, 41, 0.9) !important;
   border-color: #87612e !important;
   border-width: 4px !important;
@@ -44,7 +45,8 @@ button.close-btn-modal:hover {
   border-color: #616161 !important;
   border-radius: 4px !important;
 }
-button.close-btn-modal:active, button.btn-menu:focus {
+button.close-btn-modal:active,
+button.btn-menu:focus {
   background: rgba(97, 97, 97, 0.9) !important;
   border-color: #616161 !important;
   border-width: 4px !important;
