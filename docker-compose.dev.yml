@@ -101,7 +101,9 @@ services:
       - chess-game
 
   nginx:
-    image: nginx:stable-alpine
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
     container_name: chess-game_nginx
     hostname: nginx
     restart: unless-stopped
@@ -111,11 +113,7 @@ services:
       - ./env/nginx.dev.env
     volumes:
       - type: bind
-        source: ./docker/nginx-conf
-        target: /etc/nginx/templates
-        read_only: true
-      - type: bind
-        source: ./docker/logs/nginx
+        source: ./logs/nginx
         target: /var/log/nginx
     depends_on:
       - app-server
