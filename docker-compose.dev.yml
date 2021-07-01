@@ -74,13 +74,15 @@ services:
   #     - chess-game
 
   redis-cache:
-    image: redis:alpine
-    container_name: chess-game_redis
+    build:
+      context: ./docker/redis-cache
+      dockerfile: Dockerfile
+    container_name: chess-game_redis-cache
     hostname: redis-cache
     restart: unless-stopped
     volumes:
       - type: volume
-        source: redis-data
+        source: redis-cache-data
         target: /data
     logging:
       driver: none
@@ -125,8 +127,8 @@ services:
       - chess-game
 
 volumes:
-  redis-data:
-    name: chess-game_redis
+  redis-cache-data:
+    name: chess-game_redis-cache
 
   redisinsight-data:
     name: chess-game_redisinsight
