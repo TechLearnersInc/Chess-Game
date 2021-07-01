@@ -16,7 +16,7 @@ services:
         target: /home/node/app
       - /home/node/app/node_modules
     depends_on:
-      - redis
+      - redis-cache
     networks:
       - chess-game
 
@@ -37,7 +37,7 @@ services:
         target: /home/node/app
       - /home/node/app/node_modules
     depends_on:
-      - redis
+      - redis-cache
     networks:
       - chess-game
 
@@ -59,20 +59,15 @@ services:
   #   networks:
   #     - chess-game
 
-  redis:
+  redis-cache:
     image: redis:alpine
     container_name: chess-game_redis
     hostname: redis
     restart: unless-stopped
-    command: "redis-server /usr/local/etc/redis/redis.conf"
     volumes:
       - type: volume
         source: redis-data
         target: /data
-      - type: bind
-        source: ./docker/redis-conf
-        target: /usr/local/etc/redis
-        read_only: true
     logging:
       driver: none
     networks:
@@ -89,12 +84,6 @@ services:
       - type: volume
         source: redisinsight-data
         target: /db
-      - type: bind
-        source: ./docker/redis-conf
-        target: /usr/local/etc/redis/
-        read_only: true
-    depends_on:
-      - redis
     logging:
       driver: none
     networks:
