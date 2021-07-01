@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   app-server:
@@ -41,6 +41,20 @@ services:
     networks:
       - chess-game
 
+  # haproxy:
+  #   build:
+  #     context: ./docker/haproxy
+  #     dockerfile: Dockerfile
+  #   container_name: chess-game_haproxy
+  #   hostname: haproxy
+  #   # restart: unless-stopped
+  #   ports:
+  #     - '8888:3000'
+  #   depends_on:
+  #     - app-server
+  #   networks:
+  #     - chess-game
+
   # couchdb:
   #   image: couchdb:latest
   #   container_name: couchdb
@@ -62,7 +76,7 @@ services:
   redis-cache:
     image: redis:alpine
     container_name: chess-game_redis
-    hostname: redis
+    hostname: redis-cache
     restart: unless-stopped
     volumes:
       - type: volume
@@ -79,7 +93,7 @@ services:
     hostname: redisinsight
     restart: unless-stopped
     ports:
-      - "8001:8001"
+      - '8001:8001'
     volumes:
       - type: volume
         source: redisinsight-data
@@ -97,7 +111,7 @@ services:
     hostname: nginx
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - '8080:80'
     env_file:
       - ./env/nginx.dev.env
     volumes:

@@ -20,7 +20,8 @@
       "socket-server/": true
     },
     "files.associations": {
-      "*.conf": "plaintext"
+      "*.conf": "plaintext",
+      "*.cfg": "plaintext"
     },
     "npm.autoDetect": "on",
     "npm.exclude": [
@@ -28,5 +29,20 @@
       "**/socket-server**"
     ],
     "terminal.integrated.cwd": "${workspaceFolder}",
+    // Prettier
+    "prettier.arrowParens": "avoid",
+    "prettier.bracketSpacing": true,
+    "prettier.embeddedLanguageFormatting": "auto",
+    "prettier.htmlWhitespaceSensitivity": "css",
+    "prettier.insertPragma": false,
+    "prettier.printWidth": 100,
+    "prettier.proseWrap": "preserve",
+    "prettier.quoteProps": "as-needed",
+    "prettier.requirePragma": false,
+    "prettier.semi": true,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 2,
+    "prettier.trailingComma": "es5",
+    "prettier.useTabs": false
   }
 }
