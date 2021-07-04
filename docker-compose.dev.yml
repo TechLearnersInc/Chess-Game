@@ -1,6 +1,7 @@
-version: '3.9'
+version: "3.9"
 
 services:
+  # Main Application
   app-server:
     build:
       context: ./app-server
@@ -17,9 +18,11 @@ services:
       - /home/node/app/node_modules
     depends_on:
       - redis-cache
+      - socket-server
     networks:
       - chess-game
 
+  # Gameserver Application
   socket-server:
     build:
       context: ./socket-server
@@ -38,6 +41,7 @@ services:
       - /home/node/app/node_modules
     depends_on:
       - redis-cache
+      - redis-message-broker
     networks:
       - chess-game
 
@@ -73,9 +77,10 @@ services:
   #   networks:
   #     - chess-game
 
+  # Redis Cache for whole system
   redis-cache:
     build:
-      context: ./docker/redis-cache
+      context: ./docker/redis
       dockerfile: Dockerfile
     container_name: chess-game_redis-cache
     hostname: redis-cache
@@ -89,13 +94,31 @@ services:
     networks:
       - chess-game
 
+  # Redis Message Broker for socket-server
+  redis-message-broker:
+    build:
+      context: ./docker/redis
+      dockerfile: Dockerfile
+    container_name: chess-game_redis-message-broker
+    hostname: redis-message-broker
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: redis-message-broker
+        target: /data
+    logging:
+      driver: none
+    networks:
+      - chess-game
+
+  # Redisinsight for Redis GUI Management
   redisinsight:
     image: redislabs/redisinsight:latest
     container_name: chess-game_redisinsight
     hostname: redisinsight
     restart: unless-stopped
     ports:
-      - '8001:8001'
+      - "8001:8001"
     volumes:
       - type: volume
         source: redisinsight-data
@@ -105,6 +128,7 @@ services:
     networks:
       - chess-game
 
+  # Reverse Proxy for whole system
   nginx:
     build:
       context: ./docker/nginx
@@ -113,7 +137,7 @@ services:
     hostname: nginx
     restart: unless-stopped
     ports:
-      - '8080:80'
+      - "8080:80"
     env_file:
       - ./env/nginx.dev.env
     volumes:
@@ -129,6 +153,9 @@ services:
 volumes:
   redis-cache-data:
     name: chess-game_redis-cache
+
+  redis-message-broker:
+    name: chess-game_redis-message-broker
 
   redisinsight-data:
     name: chess-game_redisinsight
