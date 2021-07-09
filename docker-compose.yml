@@ -1,81 +1,43 @@
-version: "3.9"
+version: '3.3'
 
 services:
   # Main Application
   app-server:
     build:
       context: ./app-server
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: chess-game_app-server
-    hostname: app-server
     restart: unless-stopped
     env_file:
-      - ./env/app-server.dev.env
+      - ./env/app-server.env
     volumes:
-      - type: bind
-        source: ./app-server
-        target: /home/node/app
+      - ./app-server:/home/node/app
       - /home/node/app/node_modules
     depends_on:
       - redis-cache
       - socket-server
     networks:
-      - chess-game
+      - chess-game-network
 
   # Gameserver Application
   socket-server:
     build:
       context: ./socket-server
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: chess-game_socket-server
-    hostname: socket-server
     restart: unless-stopped
     # ports:
     #   - "3001:3001"
     env_file:
-      - ./env/socket-server.dev.env
+      - ./env/socket-server.env
     volumes:
-      - type: bind
-        source: ./socket-server
-        target: /home/node/app
+      - ./socket-server:/home/node/app
       - /home/node/app/node_modules
     depends_on:
       - redis-cache
       - redis-message-broker
     networks:
-      - chess-game
-
-  # haproxy:
-  #   build:
-  #     context: ./docker/haproxy
-  #     dockerfile: Dockerfile
-  #   container_name: chess-game_haproxy
-  #   hostname: haproxy
-  #   # restart: unless-stopped
-  #   ports:
-  #     - '8888:3000'
-  #   depends_on:
-  #     - app-server
-  #   networks:
-  #     - chess-game
-
-  # couchdb:
-  #   image: couchdb:latest
-  #   container_name: couchdb
-  #   restart: unless-stopped
-  #   ports:
-  #     - "5984:5984"
-  #   environment:
-  #     - COUCHDB_USER=admin
-  #     - COUCHDB_PASSWORD=couchdb12345
-  #   volumes:
-  #     - couchdb-data:/opt/couchdb/data
-  #   logging:
-  #       driver: none
-  #       options:
-  #         syslog-address: "tcp://0.0.0.0:1234"
-  #   networks:
-  #     - chess-game
+      - chess-game-network
 
   # Redis Cache for whole system
   redis-cache:
@@ -83,16 +45,16 @@ services:
       context: ./docker/redis
       dockerfile: Dockerfile
     container_name: chess-game_redis-cache
-    hostname: redis-cache
     restart: unless-stopped
     volumes:
-      - type: volume
-        source: redis-cache-data
-        target: /data
+      # - type: volume
+      #   source: redis-cache-data
+      #   target: /data
+      - redis-cache-data:/data
     logging:
       driver: none
     networks:
-      - chess-game
+      - chess-game-network
 
   # Redis Message Broker for socket-server
   redis-message-broker:
@@ -100,33 +62,33 @@ services:
       context: ./docker/redis
       dockerfile: Dockerfile
     container_name: chess-game_redis-message-broker
-    hostname: redis-message-broker
     restart: unless-stopped
     volumes:
-      - type: volume
-        source: redis-message-broker
-        target: /data
+      # - type: volume
+      #   source: redis-message-broker
+      #   target: /data
+      - redis-message-broker:/data
     logging:
       driver: none
     networks:
-      - chess-game
+      - chess-game-network
 
   # Redisinsight for Redis GUI Management
   redisinsight:
     image: redislabs/redisinsight:latest
     container_name: chess-game_redisinsight
-    hostname: redisinsight
     restart: unless-stopped
     ports:
-      - "8001:8001"
+      - '8001:8001'
     volumes:
-      - type: volume
-        source: redisinsight-data
-        target: /db
+      # - type: volume
+      #   source: redisinsight-data
+      #   target: /db
+      - redisinsight-data:/db
     logging:
       driver: none
     networks:
-      - chess-game
+      - chess-game-network
 
   # Reverse Proxy for whole system
   nginx:
@@ -134,21 +96,20 @@ services:
       context: ./docker/nginx
       dockerfile: Dockerfile
     container_name: chess-game_nginx
-    hostname: nginx
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - '8080:80'
     env_file:
-      - ./env/nginx.dev.env
+      - ./env/nginx.env
     volumes:
-      - type: bind
-        source: ./logs/nginx
-        target: /var/log/nginx
+      - ./logs/nginx:/var/log/nginx
     depends_on:
       - app-server
       - socket-server
+    logging:
+      driver: none
     networks:
-      - chess-game
+      - chess-game-network
 
 volumes:
   redis-cache-data:
@@ -160,9 +121,6 @@ volumes:
   redisinsight-data:
     name: chess-game_redisinsight
 
-  # couchdb-data:
-  #   name: couchdb
-
 networks:
-  chess-game:
+  chess-game-network:
     driver: bridge

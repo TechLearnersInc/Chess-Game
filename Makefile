@@ -8,7 +8,7 @@ build:
 	@docker-compose -f docker-compose.yml build --no-cache
 
 up:
-	@docker-compose -f docker-compose.yml up --force-recreate -d
+	@docker-compose -f docker-compose.yml up --force-recreate
 
 start:
 	@docker-compose -f docker-compose.yml start

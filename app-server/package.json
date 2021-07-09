@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "This a peer-to-peer online Chase game where two persons can play simultaneously.",
   "main": "./bin/www",
-  "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
-  },
   "author": "TechLearners",
   "license": "MIT",
   "dependencies": {

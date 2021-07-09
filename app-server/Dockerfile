@@ -1,6 +1,6 @@
 FROM node:14-alpine
 
-RUN npm install nodemon -g
+RUN npm install -g nodemon
 RUN mkdir -p /home/node/app
 RUN chown -R node:node /home/node/app
 
@@ -16,5 +16,5 @@ COPY --chown=node:node . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["node", "./bin/www"]
 
