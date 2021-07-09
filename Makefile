@@ -1,3 +1,9 @@
+all:
+	@make down
+	@make clean
+	@make build
+	@make up
+
 build:
 	@docker-compose -f docker-compose.yml build --no-cache
 
