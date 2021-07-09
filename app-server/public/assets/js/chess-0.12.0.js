@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2021, Jeff Hlywa (jhlywa@gmail.com)
  * All rights reserved.
  *
@@ -24,6 +24,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  *----------------------------------------------------------------------------*/
+
+/**
+ * Forcefull Game Turning Method added for Multiplayer mode (No available in original version)
+ * Refrence: https://stackoverflow.com/questions/31584269/how-to-change-the-turn-in-chessboard-js/36818494
+ */
 
 var Chess = function (fen) {
   var BLACK = 'b';
@@ -1732,6 +1737,15 @@ var Chess = function (fen) {
       return turn;
     },
 
+    // Forcefull Game Turning for Multiplayer
+    // Refrence: https://stackoverflow.com/questions/31584269/how-to-change-the-turn-in-chessboard-js/36818494
+    setTurn: function (newTurn) {
+      newTurn = newTurn.toLowerCase();
+      if (newTurn.startsWith('w')) turn = WHITE;
+      else if (newTurn.startsWith('b')) turn = BLACK;
+      else throw new Error('Wrong turn argument has provided.');
+    },
+
     move: function (move, options) {
       /* The move function can be called with in the following parameters:
        *
@@ -1870,9 +1884,9 @@ var Chess = function (fen) {
   };
 };
 
-/* export Chess object if using node or any other CommonJS compatible
- * environment */
+/* export Chess object if using node or any other CommonJS compatible environment */
 if (typeof exports !== 'undefined') exports.Chess = Chess;
+
 /* export Chess object for any RequireJS compatible environment */
 if (typeof define !== 'undefined')
   define(function () {
