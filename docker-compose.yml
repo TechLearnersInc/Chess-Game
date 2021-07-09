@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: chess-game_app-server
     restart: unless-stopped
+    command: nodemon ./bin/www # node ./bin/www
     env_file:
       - ./env/app-server.env
     volumes:
@@ -26,8 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: chess-game_socket-server
     restart: unless-stopped
-    # ports:
-    #   - "3001:3001"
+    command: nodemon ./bin/www # node ./bin/www
     env_file:
       - ./env/socket-server.env
     volumes:
@@ -47,9 +47,6 @@ services:
     container_name: chess-game_redis-cache
     restart: unless-stopped
     volumes:
-      # - type: volume
-      #   source: redis-cache-data
-      #   target: /data
       - redis-cache-data:/data
     logging:
       driver: none
@@ -64,9 +61,6 @@ services:
     container_name: chess-game_redis-message-broker
     restart: unless-stopped
     volumes:
-      # - type: volume
-      #   source: redis-message-broker
-      #   target: /data
       - redis-message-broker:/data
     logging:
       driver: none
@@ -81,9 +75,6 @@ services:
     ports:
       - '8001:8001'
     volumes:
-      # - type: volume
-      #   source: redisinsight-data
-      #   target: /db
       - redisinsight-data:/db
     logging:
       driver: none
