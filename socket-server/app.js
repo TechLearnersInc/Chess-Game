@@ -2,8 +2,6 @@
 const socketio = require('socket.io');
 const io = socketio(undefined, require('./socket.config'));
 
-let sockets = {};
-
 // SocketIO
 io.on('connection', socket => {
   const clientHeaders = socket.request.headers;
