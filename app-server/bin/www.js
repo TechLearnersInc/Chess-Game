@@ -4,7 +4,7 @@ const debug = require('debug')('app-server:server');
 const http = require('http');
 
 /* Normalize a port into a number, string, or false. */
-const normalizePort = (val) => {
+const normalizePort = val => {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -21,7 +21,7 @@ const normalizePort = (val) => {
 };
 
 /* Event listener for HTTP server "error" event. */
-const onError = (error) => {
+const onError = error => {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -51,7 +51,7 @@ const onListening = () => {
 };
 
 /* Get port from environment and store in Express. */
-const port = normalizePort(process.env.NODE_PORT || '3000');
+const port = normalizePort(process.env.NODE_PORT);
 app.set('port', port);
 
 /* Create HTTP server. */
