@@ -12,7 +12,7 @@ const removeGreySquares = () => {
   $('#chess-board .square-55d63').css('background', '');
 };
 
-const greySquare = (square) => {
+const greySquare = square => {
   let $square = $('#chess-board .square-' + square);
 
   let background = whiteSquareGrey;
