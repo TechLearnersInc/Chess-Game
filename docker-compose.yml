@@ -48,8 +48,8 @@ services:
     restart: unless-stopped
     volumes:
       - redis-cache-data:/data
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     networks:
       - chess-game-network
 
@@ -62,8 +62,8 @@ services:
     restart: unless-stopped
     volumes:
       - redis-message-broker:/data
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     networks:
       - chess-game-network
 
@@ -76,8 +76,8 @@ services:
       - '8001:8001'
     volumes:
       - redisinsight-data:/db
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     networks:
       - chess-game-network
 
@@ -92,15 +92,23 @@ services:
       - '8080:80'
     env_file:
       - ./env/nginx.env
-    volumes:
-      - ./logs/nginx:/var/log/nginx
     depends_on:
       - app-server
       - socket-server
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     networks:
       - chess-game-network
+
+  live-logging:
+    image: amir20/dozzle:latest
+    container_name: chess-game_live-logging
+    ports:
+      - '1234:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    logging:
+      driver: none
 
 volumes:
   redis-cache-data:
