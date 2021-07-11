@@ -89,8 +89,8 @@ socket.on('invalid', async message => {
   USER_IS_VALID = false;
   console.error(`'Server says, ${message}'`);
   notification({
-    title: message,
-    text: 'Server rejected the request.',
+    title: 'Error',
+    text: message,
     action: 'show',
   });
   socket.close();

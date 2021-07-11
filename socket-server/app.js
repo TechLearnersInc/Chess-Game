@@ -29,8 +29,10 @@ io.on('connection', async client => {
     const secret = process.env.SECRET_TOKEN;
     tokenPayload = await jwt.verify(token, secret, config);
   } catch (err) {
-    if (err instanceof jwt.JsonWebTokenError) {
-      client.emit('invalid', 'Invalid Token'); // Emit Invalid Reason to Client
+    if (err instanceof jwt.TokenExpiredError) {
+      client.emit('invalid', 'Session expired, try to re-join.'); // Emit Invalid Reason to Client
+    } else if (err instanceof jwt.JsonWebTokenError) {
+      client.emit('invalid', 'Invalid token, server rejected.'); // Emit Invalid Reason to Client
     } else console.error(err);
     client.disconnect(true); // Disconnect Client
   }
