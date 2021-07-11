@@ -2,8 +2,22 @@
 const socketio = require('socket.io');
 const io = socketio(undefined, require('./socket.config'));
 const jwt = require('jsonwebtoken');
+const Redis = require('ioredis');
+const redis_config = require('./redis.config');
 
-// SocketIO
+// Redis Cache Database
+const redis = new Redis(redis_config.cachedb);
+
+// Socketio Redis Adapter
+const pubClient = new Redis(redis_config.msg_broker);
+const subClient = pubClient.duplicate();
+const { createAdapter } = require('@socket.io/redis-adapter');
+const socketAdapter = createAdapter(pubClient, subClient);
+
+/**
+ * SocketIO
+ */
+
 io.on('connection', async client => {
   const clientHeaders = client.request.headers;
   const clientCookies = cookiesStrToObject(clientHeaders.cookie);
@@ -39,4 +53,4 @@ function cookiesStrToObject(cookie_string) {
   }, {});
 }
 
-module.exports = { socket: io };
+module.exports = { io, socketAdapter };
