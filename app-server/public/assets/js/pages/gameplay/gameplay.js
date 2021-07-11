@@ -15,7 +15,11 @@ const notificationToast = new bootstrap.Toast(notificationToastID, {
 const socket = io({
   path: '/gameserver',
   transports: ['websocket'],
+  reconnection: true,
+  reconnectionAttempts: 20,
+  reconnectionDelayMax: 5000,
 });
+let USER_IS_VALID = true;
 
 // let chess_board = update_chess_board({
 //   div_id: 'chess-board',
@@ -76,6 +80,30 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
 /**
  * Socketio
  */
+
+socket.on('connection', async () => {
+  USER_IS_VALID = true;
+});
+
+socket.on('invalid', async message => {
+  USER_IS_VALID = false;
+  console.error(`'Server says, ${message}'`);
+  notification({
+    title: message,
+    text: 'Server rejected the request.',
+    action: 'show',
+  });
+  socket.close();
+});
+
+socket.on('disconnect', () => {
+  if (!USER_IS_VALID) return;
+  notification({
+    title: 'Disconnected',
+    text: 'Got disconnected from server. Will autoreconnect soon but manual refresh is recommended.',
+    action: 'show',
+  });
+});
 
 /**
  * Functions
