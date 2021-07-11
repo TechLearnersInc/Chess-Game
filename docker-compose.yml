@@ -48,8 +48,6 @@ services:
     restart: unless-stopped
     volumes:
       - redis-cache-data:/data
-    # logging:
-    #   driver: none
     networks:
       - chess-game-network
 
@@ -62,8 +60,6 @@ services:
     restart: unless-stopped
     volumes:
       - redis-message-broker:/data
-    # logging:
-    #   driver: none
     networks:
       - chess-game-network
 
@@ -76,8 +72,6 @@ services:
       - '8001:8001'
     volumes:
       - redisinsight-data:/db
-    # logging:
-    #   driver: none
     networks:
       - chess-game-network
 
