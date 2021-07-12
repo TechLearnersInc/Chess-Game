@@ -14,6 +14,10 @@ const subClient = pubClient.duplicate();
 const { createAdapter } = require('@socket.io/redis-adapter');
 const socketAdapter = createAdapter(pubClient, subClient);
 
+// variables
+const jwt_config = { algorithm: 'HS256' };
+const jwt_secret = process.env.SECRET_TOKEN;
+
 /**
  * SocketIO
  */
@@ -25,9 +29,7 @@ io.on('connection', async client => {
   let tokenPayload;
 
   try {
-    const config = { algorithm: 'HS256' };
-    const secret = process.env.SECRET_TOKEN;
-    tokenPayload = await jwt.verify(token, secret, config);
+    tokenPayload = await jwt.verify(token, jwt_secret, jwt_config);
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
       client.emit('invalid', 'Session expired, try to re-join.'); // Emit Invalid Reason to Client
