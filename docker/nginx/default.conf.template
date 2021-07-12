@@ -1,9 +1,9 @@
 upstream app-server {
-  server ${APP_SERVER_HOST}:${APP_SERVER_PORT};
+  server ${APP_SERVER_HOST};
 }
 
 upstream socket-server {
-  server ${SOCKET_SERVER_HOST}:${SOCKET_SERVER_PORT};
+  server ${SOCKET_SERVER_HOST};
 }
 
 server {
@@ -15,7 +15,7 @@ server {
 
   server_name ${NGINX_HOST};
 
-  location / {
+  location ${APP_SERVER_ROUTE_PATH} {
     try_files $uri @app-server;
   }
 
