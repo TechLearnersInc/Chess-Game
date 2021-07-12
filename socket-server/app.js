@@ -66,8 +66,7 @@ io.on('connection', async client => {
   const boardInitialState = {
     fen: gameData.fen,
     player: player,
-    turn: gameData.turn,
-    freeze: true,
+    freeze: false,
   };
   client.emit('valid', boardInitialState);
 

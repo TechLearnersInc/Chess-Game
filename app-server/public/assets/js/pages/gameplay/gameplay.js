@@ -56,7 +56,6 @@ socket.on('valid', async message => {
   const boardInitialState = {
     boardFen: message.fen,
     localTurn: message.player,
-    turn: message.turn,
     freezeBoard: message.freeze,
   };
 
