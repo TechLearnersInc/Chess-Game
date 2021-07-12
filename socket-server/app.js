@@ -14,9 +14,10 @@ const subClient = pubClient.duplicate();
 const { createAdapter } = require('@socket.io/redis-adapter');
 const socketAdapter = createAdapter(pubClient, subClient);
 
-// variables
+// Variables
 const jwt_config = { algorithm: 'HS256' };
 const jwt_secret = process.env.SECRET_TOKEN;
+const customError = require('./custom-errors');
 
 /**
  * SocketIO
@@ -27,17 +28,37 @@ io.on('connection', async client => {
   const clientCookies = cookiesStrToObject(clientHeaders.cookie);
   const token = clientCookies.token;
   let tokenPayload;
+  let gameData;
+  let gamecode;
 
+  // Validity Check
   try {
+    // JWT Check
     tokenPayload = await jwt.verify(token, jwt_secret, jwt_config);
+
+    // Gamecode check
+    gamecode = tokenPayload.gamecode;
+    gameData = await redis.hgetall(gamecode);
+    if (gameData['gamecode'] === undefined) {
+      throw new customError.gamecodeError('Invalid gamecode');
+    }
+
+    //
   } catch (err) {
-    if (err instanceof jwt.TokenExpiredError) {
-      client.emit('invalid', 'Session expired, try to re-join.'); // Emit Invalid Reason to Client
-    } else if (err instanceof jwt.JsonWebTokenError) {
-      client.emit('invalid', 'Invalid token, server rejected.'); // Emit Invalid Reason to Client
-    } else console.error(err);
-    client.disconnect(true); // Disconnect Client
+    // Emit Invalid Reason to Client
+    if (err instanceof jwt.TokenExpiredError)
+      client.emit('invalid', 'Session expired, try to re-join.');
+    else if (err instanceof jwt.JsonWebTokenError)
+      client.emit('invalid', 'Invalid token, server rejected.');
+    else if (err instanceof customError.gamecodeError)
+      client.emit('invalid', `${err.message}, server rejected.`);
+    else console.error(err);
+    // Disconnect Client
+    client.disconnect(true);
+    return;
   }
+
+  client.emit('valid', gameData);
 
   // Remove disconnected users
   client.on('disconnect', async () => {
