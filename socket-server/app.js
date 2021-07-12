@@ -4,9 +4,11 @@ const io = socketio(undefined, require('./socket.config'));
 const jwt = require('jsonwebtoken');
 const Redis = require('ioredis');
 const redis_config = require('./redis.config');
+const redisFuncsClass = require('./redis-funcs');
 
 // Redis Cache Database
 const redis = new Redis(redis_config.cachedb);
+const redisFuncs = new redisFuncsClass(redis);
 
 // Socketio Redis Adapter
 const pubClient = new Redis(redis_config.msg_broker);
@@ -17,7 +19,9 @@ const socketAdapter = createAdapter(pubClient, subClient);
 // Variables
 const jwt_config = { algorithm: 'HS256' };
 const jwt_secret = process.env.SECRET_TOKEN;
-const customError = require('./custom-errors');
+
+// Custom Errors
+const { gamecodeError } = require('./custom-errors');
 
 /**
  * SocketIO
@@ -30,18 +34,19 @@ io.on('connection', async client => {
   let tokenPayload;
   let gameData;
   let gamecode;
+  let player;
 
   // Validity Check
   try {
     // JWT Check
     tokenPayload = await jwt.verify(token, jwt_secret, jwt_config);
+    gamecode = tokenPayload.gamecode;
+    player = tokenPayload.player;
 
     // Gamecode check
-    gamecode = tokenPayload.gamecode;
-    gameData = await redis.hgetall(gamecode);
-    if (gameData['gamecode'] === undefined) {
-      throw new customError.gamecodeError('Invalid gamecode');
-    }
+    gameData = await redisFuncs.getGameData(gamecode);
+
+    if (gameData['gamecode'] === undefined) throw new gamecodeError('Invalid gamecode');
 
     //
   } catch (err) {
@@ -50,7 +55,7 @@ io.on('connection', async client => {
       client.emit('invalid', 'Session expired, try to re-join.');
     else if (err instanceof jwt.JsonWebTokenError)
       client.emit('invalid', 'Invalid token, server rejected.');
-    else if (err instanceof customError.gamecodeError)
+    else if (err instanceof gamecodeError)
       client.emit('invalid', `${err.message}, server rejected.`);
     else console.error(err);
     // Disconnect Client
@@ -58,7 +63,13 @@ io.on('connection', async client => {
     return;
   }
 
-  client.emit('valid', gameData);
+  const boardInitialState = {
+    fen: gameData.fen,
+    player: player,
+    turn: gameData.turn,
+    freeze: true,
+  };
+  client.emit('valid', boardInitialState);
 
   // Remove disconnected users
   client.on('disconnect', async () => {

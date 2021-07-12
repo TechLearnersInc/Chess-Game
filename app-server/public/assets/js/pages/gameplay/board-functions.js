@@ -4,7 +4,7 @@
  * Refrence: https://chessboardjs.com/examples.html#5003
  */
 
-function update_chess_board() {
+function CHESS_BOARD() {
   const boardFen = sessionStorage.getItem('boardFen');
   const gameTurn = sessionStorage.getItem('localTurn');
   const div_id = sessionStorage.getItem('chessboard_div_id');
