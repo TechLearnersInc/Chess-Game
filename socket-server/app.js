@@ -46,9 +46,23 @@ io.on('connection', async client => {
     // Gamecode check
     gameData = await redisFuncs.getGameData(gamecode);
 
-    if (gameData['gamecode'] === undefined) throw new gamecodeError('Invalid gamecode');
+    if (gameData['gamecode'] === undefined) {
+      throw new gamecodeError('Invalid gamecode');
+    }
 
-    //
+    console.log(gameData);
+
+    if (gameData['game']) {
+    }
+
+    const boardInitialState = {
+      fen: gameData.fen,
+      player: player,
+      freeze: true,
+    };
+
+    // Send board to server
+    client.emit('initialize-board', boardInitialState);
   } catch (err) {
     // Emit Invalid Reason to Client
     if (err instanceof jwt.TokenExpiredError)
@@ -62,13 +76,6 @@ io.on('connection', async client => {
     client.disconnect(true);
     return;
   }
-
-  const boardInitialState = {
-    fen: gameData.fen,
-    player: player,
-    freeze: false,
-  };
-  client.emit('valid', boardInitialState);
 
   // Remove disconnected users
   client.on('disconnect', async () => {

@@ -50,7 +50,7 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
  * Socketio
  */
 
-socket.on('valid', async message => {
+socket.on('initialize-board', async message => {
   USER_IS_VALID = true;
 
   const boardInitialState = {
@@ -88,10 +88,16 @@ socket.on('disconnect', () => {
 
 function updateChessBoard(data) {
   //'rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 1'
-  sessionStorage.setItem('boardFen', data.boardFen);
-  sessionStorage.setItem('localTurn', data.localTurn);
   sessionStorage.setItem('chessboard_div_id', chessBoardID.id);
-  sessionStorage.setItem('freezeBoard', data.freezeBoard);
+  if (data.boardFen !== undefined) {
+    sessionStorage.setItem('boardFen', data.boardFen);
+  }
+  if (data.localTurn !== undefined) {
+    sessionStorage.setItem('localTurn', data.localTurn);
+  }
+  if (data.freezeBoard !== undefined) {
+    sessionStorage.setItem('freezeBoard', data.freezeBoard);
+  }
   CHESS_BOARD();
 }
 
