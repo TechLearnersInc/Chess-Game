@@ -13,9 +13,6 @@ up:
 start:
 	@docker-compose -f docker-compose.yml start
 
-clean:
-	@docker-compose -f docker-compose.yml --force -v
-
 down:
 	@docker-compose -f docker-compose.yml down
 
