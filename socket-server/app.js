@@ -63,15 +63,21 @@ io.on('connection', async client => {
     return;
   }
 
-  // Send board to server
-  client.emit('initialize-board', {
+  // Saved Board State
+  const boardState = {
     fen: gameData.fen,
     player: player,
-    freeze: true,
-  });
+    freeze: gameData.turn === player ? true : false,
+  };
+
+  // Send board to server
+  client.emit('initialize-board', boardState);
 
   // Player Active
   await redisFuncs.setPlayerJoined(gamecode, player);
+
+  // Joining Game Room
+  client.join(gamecode);
 
   // Remove disconnected users
   client.on('disconnect', async () => {
