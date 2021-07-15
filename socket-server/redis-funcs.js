@@ -27,6 +27,11 @@ class RedisFunctions {
     await redis.hset(gamecode, 'turn', player);
   }
 
+  async setFen(gamecode, fen) {
+    const redis = this.redis;
+    await redis.hset(gamecode, 'fen', fen);
+  }
+
   async getPlayerJoinDetails(gamecode) {
     const gamedata = await this.getGameData(gamecode);
     let data = { white: false, black: false };

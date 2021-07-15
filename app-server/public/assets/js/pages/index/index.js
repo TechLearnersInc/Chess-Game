@@ -46,8 +46,9 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
 
 // Initial gamecode clear
 setTimeout(() => {
-  localStorage.removeItem('gamecode');
-}, 5 * 1000 /* 5 Second */);
+  localStorage.clear();
+  sessionStorage.clear();
+}, 1000 /* 1 Second */);
 
 btnNewGame.addEventListener('click', async event => {
   event.preventDefault();

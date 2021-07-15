@@ -21,15 +21,6 @@ const socket = io({
 });
 let USER_IS_VALID = true;
 
-// function checkFlag() {
-//   if (flag == false) {
-//     window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
-//   } else {
-//     /* do something*/
-//   }
-// }
-// checkFlag();
-
 notificationToastID.addEventListener('show.bs.toast', () => {
   notificationToastID.classList.add('animate__animated');
   notificationToastID.classList.add('animate__fadeInDown');
@@ -50,18 +41,22 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
  * Socketio
  */
 
+// Setup board
 socket.on('initialize-board', async message => {
   USER_IS_VALID = true;
 
-  const boardInitialState = {
+  updateChessBoard({
     boardFen: message.fen,
     localTurn: message.player,
     freezeBoard: message.freeze,
-  };
-
-  updateChessBoard(boardInitialState);
+  })
+    .then(freeze => {
+      if (!freeze) waitAndSendMoveToServer();
+    })
+    .catch(err => console.error(err));
 });
 
+// If valid
 socket.on('invalid', async message => {
   USER_IS_VALID = false;
   console.error(`'Server says, ${message}'`);
@@ -73,6 +68,26 @@ socket.on('invalid', async message => {
   socket.close();
 });
 
+// Send move to server
+function waitAndSendMoveToServer() {
+  const intervalID = setInterval(() => {
+    const localFen = sessionStorage.getItem('localFen');
+    if (localFen) {
+      socket.on('send-move', localFen);
+      sessionStorage.removeItem('localFen');
+      clearInterval(intervalID);
+    } else console.log('Waiting for your move...');
+  }, 200 /* 200 mlisecond */);
+
+  setTimeout(() => {
+    clearInterval(intervalID);
+  }, 20 * 1000 /* 20 second */);
+}
+
+// Receive move from server
+socket.emit('receive-move', async message => {});
+
+// On disconnect
 socket.on('disconnect', () => {
   if (!USER_IS_VALID) return;
   notification({
@@ -87,21 +102,19 @@ socket.on('disconnect', () => {
  */
 
 function updateChessBoard(data) {
-  //'rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 1'
-  sessionStorage.setItem('chessboard_div_id', chessBoardID.id);
-  if (data.boardFen !== undefined) {
-    sessionStorage.setItem('boardFen', data.boardFen);
-  }
-  if (data.localTurn !== undefined) {
-    sessionStorage.setItem('localTurn', data.localTurn);
-  }
-  if (data.freezeBoard !== undefined) {
-    sessionStorage.setItem('freezeBoard', data.freezeBoard);
-  }
-  CHESS_BOARD();
+  return new Promise((resolve, reject) => {
+    try {
+      sessionStorage.setItem('chessboard_div_id', chessBoardID.id);
+      if (data.boardFen) sessionStorage.setItem('boardFen', data.boardFen);
+      if (data.localTurn) sessionStorage.setItem('localTurn', data.localTurn);
+      if (data.freezeBoard) sessionStorage.setItem('freezeBoard', data.freezeBoard);
+      CHESS_BOARD(); // Update
+      resolve(data.freezeBoard);
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
-
-// notification({ title: "Hi!", text: "Hello World", action: "show" });
 
 // Notification Toast Show
 function notification(args = {}) {
