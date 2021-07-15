@@ -13,12 +13,14 @@ if (cluster.isMaster) {
 
   // Cluster on listening event
   cluster.on('listening', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} started`);
+    console.log(`Worker started, PID: ${worker.process.pid}`);
   });
 
   // Cluster on exit event
   cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
+    console.log(`Worker died, PID: ${worker.process.pid}`);
+
+    // In production create new cluster if any die
     if (NODE_ENV === 'production') cluster.fork();
   });
 } else {
