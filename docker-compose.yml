@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: chess-game_socket-server
     restart: unless-stopped
-    command: nodemon ./bin/www # node ./bin/www
+    command: nodemon ./cluster # node ./bin/www
     env_file:
       - ./env/socket-server.env
     volumes:
