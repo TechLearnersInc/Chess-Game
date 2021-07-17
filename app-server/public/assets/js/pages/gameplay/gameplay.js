@@ -44,7 +44,7 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
 // Setup board
 socket.on('initialize-board', async message => {
   USER_IS_VALID = true;
-
+  console.log(message);
   updateChessBoard({
     boardFen: message.fen,
     localTurn: message.player,
@@ -65,7 +65,20 @@ socket.on('invalid', async message => {
     text: message,
     action: 'show',
   });
+  // socket.close();
+});
+
+// If server refuses connection intentionally
+socket.on('connect_error', err => {
+  const message = err.message;
+  console.error(message);
+  notification({
+    title: 'Error',
+    text: `${message}, Redirectiong to home...`,
+    action: 'show',
+  });
   socket.close();
+  setTimeout(() => window.location.replace('/'), 3 * 1000 /* 3 second */);
 });
 
 // Send move to server
@@ -73,7 +86,7 @@ function waitAndSendMoveToServer() {
   const intervalID = setInterval(() => {
     const localFen = sessionStorage.getItem('localFen');
     if (localFen) {
-      socket.on('send-move', localFen);
+      socket.emit('move', localFen);
       sessionStorage.removeItem('localFen');
       clearInterval(intervalID);
     } else console.log('Waiting for your move...');
@@ -85,7 +98,7 @@ function waitAndSendMoveToServer() {
 }
 
 // Receive move from server
-socket.emit('receive-move', async message => {});
+socket.on('move', async message => {});
 
 // On disconnect
 socket.on('disconnect', () => {
@@ -95,6 +108,10 @@ socket.on('disconnect', () => {
     text: 'Got disconnected from server. Will autoreconnect soon but manual refresh is recommended.',
     action: 'show',
   });
+});
+
+socket.on('reconnect_failed', () => {
+  console.log('Hello World');
 });
 
 /**

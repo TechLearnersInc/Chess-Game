@@ -1,9 +1,8 @@
 // Module dependencies.
 const socketio = require('socket.io');
-const io = socketio(undefined, require('./socket.config'));
-const jwt = require('jsonwebtoken');
+const io = socketio(undefined, require('./config/socketio'));
 const Redis = require('ioredis');
-const redis_config = require('./redis.config');
+const redis_config = require('./config/redis');
 const redisFuncsClass = require('./redis-funcs');
 
 // Redis Cache Database
@@ -16,50 +15,39 @@ const subClient = pubClient.duplicate();
 const { createAdapter } = require('@socket.io/redis-adapter');
 const socketAdapter = createAdapter(pubClient, subClient);
 
-// Variables
-const jwt_config = { algorithm: 'HS256' };
-const jwt_secret = process.env.SECRET_TOKEN;
-
 // Custom Errors
 const { gamecodeError } = require('./custom-errors');
 
 /**
- * SocketIO
+ * Middlewares
  */
 
+// Local Variable
+io.use((socket, next) => {
+  socket.data = {
+    redis,
+    redisFuncs,
+  };
+  next();
+});
+
+// JWT Verification
+io.use(require('./middleware/jwt-verify'));
+
+// Gamecode Verification
+io.use(require('./middleware/gamecode-verify'));
+
 io.on('connection', async client => {
-  const clientHeaders = client.request.headers;
-  const clientCookies = cookiesStrToObject(clientHeaders.cookie);
-  const token = clientCookies.token;
-  let tokenPayload;
-  let gameData;
-  let gamecode;
-  let player;
-
-  // Validity Check
-  try {
-    // JWT Check
-    tokenPayload = await jwt.verify(token, jwt_secret, jwt_config);
-    gamecode = tokenPayload.gamecode;
-    player = tokenPayload.player;
-
-    // Gamecode check
-    gameData = await redisFuncs.getGameData(gamecode);
-    if (gameData['gamecode'] === undefined) throw new gamecodeError('Invalid gamecode');
-  } catch (err) {
-    // Emit Invalid Reason to Client
-    if (err instanceof jwt.TokenExpiredError)
-      client.emit('invalid', 'Session expired, try to re-join.');
-    else if (err instanceof jwt.JsonWebTokenError)
-      client.emit('invalid', 'Invalid token, server rejected.');
-    else if (err instanceof gamecodeError)
-      client.emit('invalid', `${err.message}, server rejected.`);
-    else console.error(err);
-    // Disconnect Client
-    client.disconnect(true);
-    return;
-  }
-
+  const gamecode = client.data.gamecode;
+  const player = client.data.player;
+  // console.log(client.data);
+  // console.log(client.request);
+  // Joining Game Room
+  // client.join(gamecode);
+  // console.log('Hello World');
+  // console.log(client.handshake.query);
+  // console.log(io.sockets.adapter.rooms.get(gamecode));
+  /*
   // Saved Board State
   const boardState = {
     fen: gameData.fen,
@@ -68,35 +56,25 @@ io.on('connection', async client => {
   };
 
   // Send board to server
+  // io.to(gamecode).emit('move', boardState);
   client.emit('initialize-board', boardState);
 
   // Player Active
   await redisFuncs.setPlayerJoined(gamecode, player);
 
-  // Joining Game Room
-  client.join(gamecode);
-
   // Getting White/Black Turned Fen
-  client.on('turnFen', async message => {
-    console.log(cookiesStrToObject(client.request.headers.clientHeaders.cookie));
+  client.on('send-move', async message => {
+    console.log(message);
   });
-
+  */
   // Remove disconnected users
   client.on('disconnect', async () => {
-    redisFuncs.setPlayerLefted(gamecode, player);
+    await redisFuncs.setPlayerLefted(gamecode, player);
   });
 });
 
 /**
  * Functions
  */
-
-function cookiesStrToObject(cookie_string) {
-  return cookie_string.split('; ').reduce((prev, current) => {
-    const [name, ...value] = current.split('=');
-    prev[name] = value.join('=');
-    return prev;
-  }, {});
-}
 
 module.exports = { io, socketAdapter };
