@@ -15,9 +15,6 @@ const subClient = pubClient.duplicate();
 const { createAdapter } = require('@socket.io/redis-adapter');
 const socketAdapter = createAdapter(pubClient, subClient);
 
-// Custom Errors
-const { gamecodeError } = require('./custom-errors');
-
 /**
  * Middlewares
  */
@@ -37,16 +34,12 @@ io.use(require('./middleware/jwt-verify'));
 // Gamecode Verification
 io.use(require('./middleware/gamecode-verify'));
 
-io.on('connection', async client => {
-  const gamecode = client.data.gamecode;
-  const player = client.data.player;
-  // console.log(client.data);
-  // console.log(client.request);
-  // Joining Game Room
-  // client.join(gamecode);
-  // console.log('Hello World');
-  // console.log(client.handshake.query);
-  // console.log(io.sockets.adapter.rooms.get(gamecode));
+io.on('connection', async socket => {
+  const payload = socket.data.payload;
+  const gamecode = payload.gamecode;
+  const player = payload.player;
+  const redisFuncs = socket.data.redisFuncs;
+
   /*
   // Saved Board State
   const boardState = {
@@ -55,21 +48,9 @@ io.on('connection', async client => {
     freeze: gameData.turn === player ? false : true,
   };
 
-  // Send board to server
-  // io.to(gamecode).emit('move', boardState);
-  client.emit('initialize-board', boardState);
-
-  // Player Active
-  await redisFuncs.setPlayerJoined(gamecode, player);
-
-  // Getting White/Black Turned Fen
-  client.on('send-move', async message => {
-    console.log(message);
-  });
-  */
   // Remove disconnected users
-  client.on('disconnect', async () => {
-    await redisFuncs.setPlayerLefted(gamecode, player);
+  socket.on('disconnect', async () => {
+    if (payload) redisFuncs.setPlayerLefted(gamecode, player);
   });
 });
 
