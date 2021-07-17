@@ -9,7 +9,7 @@ const csrf = require('csurf');
 const logger = require('morgan');
 
 const app = express();
-const redis = new Redis(require('./redis.config'));
+const redis = new Redis(require('./config/redis'));
 
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
@@ -20,8 +20,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors(require('./cors.config')));
-app.use(csrf(require('./csrf.config')));
+app.use(cors(require('./config/cors')));
+app.use(csrf(require('./config/csrf')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* Express local variables within the app */
