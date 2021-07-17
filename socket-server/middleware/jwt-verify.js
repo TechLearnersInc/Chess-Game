@@ -5,7 +5,7 @@ const jwt_config = require('../config/jwt').config;
 const jwt_secret = require('../config/jwt').secret;
 
 // Middleware
-module.exports = (client, next) => {
+function middleware(client, next) {
   const headers = client.request.headers;
   const cookies = cookie.parse(headers.cookie);
   const token = cookies.token;
@@ -13,10 +13,8 @@ module.exports = (client, next) => {
   // Verifying JWT
   jwt.verify(token, jwt_secret, jwt_config, (err, payload) => {
     if (err) {
-      const err_message = `${err.name}: ${err.message}`;
-      console.log(err_message);
-      client.disconnect(true);
-      next(new Error(err_message));
+      console.log(`${err.name}: ${err.message}`);
+      next(new Error('Not authorized'));
     } else {
       client.payload = payload;
       next();
@@ -48,4 +46,6 @@ module.exports = (client, next) => {
   //   else console.error(err);
   //   */
   // }
-};
+}
+
+module.exports = middleware;
