@@ -13,7 +13,7 @@ if (cluster.isMaster) {
 
   // Cluster on listening event
   cluster.on('listening', (worker, code, signal) => {
-    console.log(`Worker started, PID: ${worker.process.pid}`);
+    // console.log(`Worker started, PID: ${worker.process.pid}`);
   });
 
   // Cluster on exit event
@@ -25,5 +25,5 @@ if (cluster.isMaster) {
   });
 } else {
   // Run App Server
-  require('./bin/www');
+  require('./www');
 }
