@@ -47,6 +47,7 @@ io.on('connection', async socket => {
     player: player,
     freeze: gameData.turn === player ? false : true,
   };
+  */
 
   // Remove disconnected users
   socket.on('disconnect', async () => {
