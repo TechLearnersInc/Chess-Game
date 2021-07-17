@@ -1,9 +1,9 @@
 // Middleware
-async function middleware(client, next) {
-  const payload = client.data.payload;
+async function middleware(socket, next) {
+  const payload = socket.data.payload;
   const gamecode = payload.gamecode;
   const player = payload.player;
-  const redisFuncs = client.data.redisFuncs;
+  const redisFuncs = socket.data.redisFuncs;
   let gamedata;
 
   // Getting gamadata
