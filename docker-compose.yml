@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: chess-game_app-server
     restart: unless-stopped
-    command: nodemon ./cluster # node ./cluster or ./bin/www
+    command: nodemon ./bin/www-cluster # node ./www-cluster or ./bin/www
     env_file:
       - ./env/app-server.env
     volumes:
@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: chess-game_socket-server
     restart: unless-stopped
-    command: nodemon ./cluster # node ./cluster or ./bin/www
+    command: nodemon ./bin/www-cluster # node ./www-cluster or ./bin/www
     env_file:
       - ./env/socket-server.env
     volumes:
@@ -93,16 +93,6 @@ services:
     #   driver: none
     networks:
       - chess-game-network
-
-  live-logging:
-    image: amir20/dozzle:latest
-    container_name: chess-game_live-logging
-    ports:
-      - '1234:8080'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    logging:
-      driver: none
 
 volumes:
   redis-cache-data:
