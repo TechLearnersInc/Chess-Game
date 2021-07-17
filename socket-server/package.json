@@ -2,7 +2,6 @@
   "name": "socket-server",
   "version": "1.0.0",
   "description": "This a peer-to-peer online Chase game where two persons can play simultaneously.",
-  "main": "./bin/www",
   "author": "TechLearners",
   "license": "MIT",
   "repository": {
