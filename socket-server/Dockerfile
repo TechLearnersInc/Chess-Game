@@ -1,7 +1,9 @@
 FROM node:14-alpine
 
+RUN npm install -g npm
 RUN npm install -g nodemon
 RUN mkdir -p /home/node/app
+
 RUN chown -R node:node /home/node/app
 
 USER node
