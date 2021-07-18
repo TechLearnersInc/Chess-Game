@@ -15,7 +15,7 @@ services:
       - ./app-server:/home/node/app
       - /home/node/app/node_modules
     depends_on:
-      - redis-cache
+      - restapi-server
       - socket-server
     networks:
       - chess-game-network
@@ -34,8 +34,26 @@ services:
       - ./socket-server:/home/node/app
       - /home/node/app/node_modules
     depends_on:
-      - redis-cache
+      - restapi-server
       - redis-message-broker
+    networks:
+      - chess-game-network
+
+  # Rest API Application
+  restapi-server:
+    build:
+      context: ./restapi-server
+      dockerfile: Dockerfile
+    container_name: chess-game_restapi-server
+    restart: unless-stopped
+    command: nodemon ./bin/www-cluster  # Comment it when production
+    env_file:
+      - ./env/restapi-server.env
+    volumes:
+      - ./restapi-server:/home/node/app
+      - /home/node/app/node_modules
+    depends_on:
+      - redis-cache
     networks:
       - chess-game-network
 
