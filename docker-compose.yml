@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: chess-game_app-server
     restart: unless-stopped
-    command: nodemon ./bin/www-cluster # node ./www-cluster or ./bin/www
+    command: nodemon ./bin/www-cluster  # Comment it when production
     env_file:
       - ./env/app-server.env
     volumes:
