@@ -12,6 +12,10 @@
       "name": "socket-server",
       "path": "socket-server"
     },
+    {
+      "name": "restapi-server",
+      "path": "restapi-server"
+    },
   ],
   "settings": {
     "files.exclude": {
@@ -26,7 +30,8 @@
     "npm.autoDetect": "on",
     "npm.exclude": [
       "**/app-server**",
-      "**/socket-server**"
+      "**/socket-server**",
+      "**/restapi-server**"
     ],
     "terminal.integrated.cwd": "${workspaceFolder}",
   }
