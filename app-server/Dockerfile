@@ -1,6 +1,5 @@
 FROM node:14-alpine
 
-RUN npm install -g npm
 RUN npm install -g nodemon
 RUN npm install -g pm2@latest
 

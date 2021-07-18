@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: chess-game_socket-server
     restart: unless-stopped
-    command: nodemon ./bin/www-cluster  # Comment it when production
+    RUN npm install -g npmcommand: nodemon ./bin/www-cluster  # Comment it when production
     env_file:
       - ./env/socket-server.env
     volumes:
