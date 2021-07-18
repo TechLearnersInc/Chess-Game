@@ -19,6 +19,5 @@ COPY --chown=node:node . .
 
 EXPOSE 3000
 
-# CMD ["node", "./bin/www"]
 CMD ["pm2-runtime", "start", "pm2.config.js"]
 
