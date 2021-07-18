@@ -1,0 +1,6 @@
+{
+  "watch": ["."],
+  "verbose": false,
+  "ignore": ["node_modules/", ".git/", "public/", "logs/"],
+  "delay": "1000"
+}

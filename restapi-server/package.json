@@ -1,0 +1,21 @@
+{
+  "name": "restapi-server",
+  "version": "1.0.0",
+  "description": "This a peer-to-peer online Chase game where two persons can play simultaneously.",
+  "author": "TechLearners",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechLearnersInc/Chess-Game.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TechLearnersInc/Chess-Game/issues"
+  },
+  "homepage": "https://github.com/TechLearnersInc/Chess-Game",
+  "dependencies": {
+    "restify": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
