@@ -15,7 +15,7 @@ services:
       - ./app-server:/home/node/app
       - /home/node/app/node_modules
     depends_on:
-      - restapi-server
+      # - restapi-server
       - socket-server
     networks:
       - chess-game-network
@@ -34,7 +34,7 @@ services:
       - ./socket-server:/home/node/app
       - /home/node/app/node_modules
     depends_on:
-      - restapi-server
+      # - restapi-server
       - redis-message-broker
     networks:
       - chess-game-network
@@ -114,13 +114,13 @@ services:
 
 volumes:
   redis-cache-data:
-    name: chess-game_redis-cache
+    # name: chess-game_redis-cache
 
   redis-message-broker:
-    name: chess-game_redis-message-broker
+    # name: chess-game_redis-message-broker
 
   redisinsight-data:
-    name: chess-game_redisinsight
+    # name: chess-game_redisinsight
 
 networks:
   chess-game-network:
