@@ -9,6 +9,8 @@ services:
     container_name: chess-game_app-server
     restart: unless-stopped
     command: nodemon ./bin/www-cluster # Comment it when production
+    ports:
+      - '3000:3000'
     env_file:
       - ./env/app-server.env
     volumes:
