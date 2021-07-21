@@ -19,9 +19,9 @@
   ],
   "settings": {
     "files.exclude": {
-      "node_modules/": true,
       "app-server/": true,
-      "socket-server/": true
+      "socket-server/": true,
+      "restapi-server/": true
     },
     "files.associations": {
       "*.conf": "plaintext",
