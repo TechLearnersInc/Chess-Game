@@ -21,6 +21,9 @@
   "devDependencies": {
     "nodemon": "^2.0.12"
   },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TechLearnersInc/Chess-Game.git"
