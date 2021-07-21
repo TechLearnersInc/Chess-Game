@@ -13,7 +13,7 @@ services:
       - ./env/app-server.env
     volumes:
       - ./app-server:/home/node/app
-      - /home/node/app/node_modules
+      - ./node_modules:/home/node/app/node_modules
     depends_on:
       # - restapi-server
       - socket-server
@@ -32,7 +32,7 @@ services:
       - ./env/socket-server.env
     volumes:
       - ./socket-server:/home/node/app
-      - /home/node/app/node_modules
+      - ./node_modules:/home/node/app/node_modules
     depends_on:
       # - restapi-server
       - redis-message-broker
@@ -51,7 +51,7 @@ services:
       - ./env/restapi-server.env
     volumes:
       - ./restapi-server:/home/node/app
-      - /home/node/app/node_modules
+      - ./node_modules:/home/node/app/node_modules
     depends_on:
       - redis-cache
     networks:
