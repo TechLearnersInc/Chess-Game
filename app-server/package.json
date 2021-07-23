@@ -16,7 +16,8 @@
     "ioredis": "^4.27.6",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.10.0",
-    "nanoid": "^3.1.23"
+    "nanoid": "^3.1.23",
+    "restify-clients": "^3.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
