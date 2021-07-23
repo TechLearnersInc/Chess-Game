@@ -1,6 +1,7 @@
 /* Variables */
 const createError = require('http-errors');
 const express = require('express');
+const restify = require('restify-clients');
 const path = require('path');
 const cors = require('cors');
 const Redis = require('ioredis');
@@ -10,6 +11,7 @@ const logger = require('morgan');
 
 const app = express();
 const redis = new Redis(require('./config/redis'));
+const restClient = restify.createJsonClient(process.env.REST_API_SERVER);
 
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +28,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /* Express local variables within the app */
 app.locals.redis = redis;
+app.locals.restClient = restClient;
+
+restClient.get('/expire', (err, req, res, obj) => {
+  console.log(obj);
+});
 
 /* Routes */
 app.use('/', require('./routes/index'));
