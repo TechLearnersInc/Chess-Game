@@ -13,6 +13,8 @@
   },
   "homepage": "https://github.com/TechLearnersInc/Chess-Game",
   "dependencies": {
+    "debug": "^4.3.2",
+    "morgan": "^1.10.0",
     "restify": "^8.5.1"
   },
   "devDependencies": {
