@@ -16,7 +16,8 @@
     "debug": "^4.3.2",
     "ioredis": "^4.27.6",
     "morgan": "^1.10.0",
-    "restify": "^8.5.1"
+    "restify": "^8.5.1",
+    "restify-errors": "^8.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
