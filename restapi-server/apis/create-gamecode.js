@@ -1,13 +1,11 @@
 const restify_err = require('restify-errors');
 
-async function setExpire(req, res, next) {
+async function createGamecode(req, res, next) {
   const redis = res.locals.redisClient;
   const data = req.body;
 
   try {
-    const status = await redis.expire(data.gamecode, data.expiresIn);
-    // 0 => Failed and 1 => Success
-    if (status === 0) throw new Error("Gamecode doesn't exist");
+    await redis.hmset(data.gamecode, ...data.fields);
     res.send(200);
   } catch (err) {
     console.error(err);
@@ -18,4 +16,4 @@ async function setExpire(req, res, next) {
   next();
 }
 
-module.exports = setExpire;
+module.exports = createGamecode;

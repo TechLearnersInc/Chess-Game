@@ -12,7 +12,11 @@ router.get('/', (req, res) => {
 
 /* New Gamecode Creation */
 router.post('/', async (req, res) => {
-  // Gamecode Variables
+  // App local variables
+  const restClient = res.app.locals.restClient;
+  const restEndpoints = res.app.locals.restClientEndpoints;
+
+  // Variables
   const gamecode = nanoid();
   const fields = [
     ...['gamecode', gamecode],
@@ -24,17 +28,28 @@ router.post('/', async (req, res) => {
     ...['turn', 'white'],
   ];
 
-  // Redis Variables
-  const redis = req.app.locals.redis;
-  const restClient = req.app.locals.restClient;
-  const expiresIn = 3600; /* 3600s = 1h */
-
-  // Redis Actions
+  // Actions
   try {
-    await redis.hmset(gamecode, ...fields); // Creating New gamecode
-    await redis.expire(gamecode, expiresIn); // Setting initial expiration
-    restClient.get('/expire', (err, req, res, obj) => {
-      console.log(obj);
+    // Creating New gamecode
+    await new Promise((resolve, reject) => {
+      const rest_end_point = restEndpoints.new_gamecode;
+      const body = { gamecode, fields };
+      const callback = (err, req, res, obj) => {
+        if (err) reject(err);
+        else resolve(res.statusCode);
+      };
+      restClient.post(rest_end_point, body, callback);
+    });
+
+    // Setting initial expiration
+    await new Promise((resolve, reject) => {
+      const rest_end_point = restEndpoints.set_expire;
+      const body = { gamecode, expiresIn: 3600 /* 3600s = 1h */ };
+      const callback = (err, req, res, obj) => {
+        if (err) reject(err);
+        else resolve(res.statusCode);
+      };
+      restClient.post(rest_end_point, body, callback);
     });
   } catch (err) {
     console.error(err);

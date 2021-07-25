@@ -29,10 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 /* Express local variables within the app */
 app.locals.redis = redis;
 app.locals.restClient = restClient;
-
-restClient.get('/expire', (err, req, res, obj) => {
-  console.log(obj);
-});
+app.locals.restClientEndpoints = {
+  new_gamecode: '/create-gamecode',
+  set_expire: '/set-expire',
+};
 
 /* Routes */
 app.use('/', require('./routes/index'));

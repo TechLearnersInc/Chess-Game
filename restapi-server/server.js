@@ -3,23 +3,22 @@ const Redis = require('ioredis');
 const logger = require('morgan');
 
 const server = restify.createServer();
-const redis = new Redis(require('./config/redis'));
+const redisClient = new Redis(require('./config/redis'));
 
 // Middlewares
 server.use(logger('dev'));
 server.use(restify.plugins.bodyParser());
 
-function respond(req, res, next) {
-  console.log(req.get('myMessage'));
-  res.send('hello ' + req.params.name);
+// App Global Variables
+server.use((req, res, next) => {
+  res.locals = {
+    redisClient: redisClient,
+  };
   next();
-}
+});
 
-function respond(req, res, next) {
-  res.json({ status: true });
-  next();
-}
-
-server.get('/expire', respond);
+// API Routes
+server.post('/set-expire', require('./apis/setExpire'));
+server.post('/create-gamecode', require('./apis/create-gamecode'));
 
 module.exports = server;
