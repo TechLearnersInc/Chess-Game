@@ -31,25 +31,17 @@ router.post('/', async (req, res) => {
   // Actions
   try {
     // Creating New gamecode
-    await new Promise((resolve, reject) => {
-      const rest_end_point = restEndpoints.new_gamecode;
-      const body = { gamecode, fields };
-      const callback = (err, req, res, obj) => {
-        if (err) reject(err);
-        else resolve(res.statusCode);
-      };
-      restClient.post(rest_end_point, body, callback);
+    await newGamecode({
+      client: restClient,
+      endpoint: restEndpoints.new_gamecode,
+      body: { gamecode, fields },
     });
 
     // Setting initial expiration
-    await new Promise((resolve, reject) => {
-      const rest_end_point = restEndpoints.set_expire;
-      const body = { gamecode, expiresIn: 3600 /* 3600s = 1h */ };
-      const callback = (err, req, res, obj) => {
-        if (err) reject(err);
-        else resolve(res.statusCode);
-      };
-      restClient.post(rest_end_point, body, callback);
+    await setGamecodeExpiration({
+      client: restClient,
+      endpoint: restEndpoints.set_expire,
+      body: { gamecode, expiresIn: 3600 /* 3600s = 1h */ },
     });
   } catch (err) {
     console.error(err);
@@ -61,5 +53,25 @@ router.post('/', async (req, res) => {
   // Final Response
   res.json({ gamecode });
 });
+
+// Creating New gamecode
+function newGamecode(info) {
+  return new Promise((resolve, reject) => {
+    info.client.post(info.endpoint, info.body, (err, req, res, obj) => {
+      if (err) reject(err);
+      else resolve(res.statusCode);
+    });
+  });
+}
+
+// Setting initial expiration
+function setGamecodeExpiration(info) {
+  return new Promise((resolve, reject) => {
+    info.client.post(info.endpoint, info.body, (err, req, res, obj) => {
+      if (err) reject(err);
+      else resolve(res.statusCode);
+    });
+  });
+}
 
 module.exports = router;
