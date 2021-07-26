@@ -20,5 +20,6 @@ server.use((req, res, next) => {
 // API Routes
 server.post('/set-expire', require('./apis/setExpire'));
 server.post('/create-gamecode', require('./apis/create-gamecode'));
+server.post('/get-gamedata', require('./apis/get-gamedata'));
 
 module.exports = server;

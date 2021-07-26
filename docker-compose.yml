@@ -52,6 +52,8 @@ services:
     volumes:
       - ./restapi-server:/home/node/app
       - ./node_modules:/home/node/app/node_modules
+    ports:
+      - '8999:3000'
     depends_on:
       - redis-cache
     networks:
