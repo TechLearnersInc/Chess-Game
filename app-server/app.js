@@ -4,13 +4,11 @@ const express = require('express');
 const restify = require('restify-clients');
 const path = require('path');
 const cors = require('cors');
-const Redis = require('ioredis');
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 const logger = require('morgan');
 
 const app = express();
-const redis = new Redis(require('./config/redis'));
 const restClient = restify.createJsonClient(process.env.REST_API_SERVER);
 
 /* View engine setup */
@@ -27,7 +25,6 @@ app.use(csrf(require('./config/csrf')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* Express local variables within the app */
-app.locals.redis = redis;
 app.locals.restClient = restClient;
 app.locals.restClientEndpoints = require('./config/rest-client-endpoints');
 
