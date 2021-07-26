@@ -18,8 +18,15 @@ server.use((req, res, next) => {
 });
 
 // API Routes
-server.post('/set-expire', require('./apis/setExpire'));
+server.post('/set-expire', require('./apis/set-expire'));
 server.post('/create-gamecode', require('./apis/create-gamecode'));
 server.post('/get-gamedata', require('./apis/get-gamedata'));
+server.post('/set-player-lefted', require('./apis/set-player-lefted'));
+server.post('/set-player-joined', require('./apis/set-player-joined'));
+server.post('/set-player-turn', require('./apis/set-player-turn'));
+server.post('/set-fen', require('./apis/set-fen'));
+server.post('/get-player-join-details', require('./apis/get-player-join-details'));
+server.post('/get-current-turn', require('./apis/get-current-turn'));
+server.post('/check-if-this-player-turn', require('./apis/check-if-this-player-turn'));
 
 module.exports = server;
