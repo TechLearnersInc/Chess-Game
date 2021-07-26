@@ -6,6 +6,7 @@ async function setPlayerTurn(req, res, next) {
 
   try {
     await redis.hset(data.gamecode, 'turn', data.player);
+    res.send(200);
   } catch (err) {
     console.error(err);
     next(new restify_err.InternalServerError(err.message));

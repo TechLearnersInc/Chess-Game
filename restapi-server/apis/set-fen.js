@@ -5,7 +5,8 @@ async function setFen(req, res, next) {
   const data = req.body;
 
   try {
-    redis.hset(data.gamecode, 'fen', data.fen);
+    await redis.hset(data.gamecode, 'fen', data.fen);
+    res.send(200);
   } catch (err) {
     console.error(err);
     next(new restify_err.InternalServerError(err.message));

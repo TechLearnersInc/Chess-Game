@@ -8,6 +8,7 @@ async function setPlayerJoined(req, res, next) {
     const field = `${data.player}_joined`;
     const status = 'true';
     await redis.hset(data.gamecode, field, status);
+    res.send(200);
   } catch (err) {
     console.error(err);
     next(new restify_err.InternalServerError(err.message));

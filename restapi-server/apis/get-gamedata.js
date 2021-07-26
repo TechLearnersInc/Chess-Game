@@ -5,7 +5,8 @@ async function getGamedata(req, res, next) {
   const data = req.body;
 
   try {
-    res.json(await redis.hgetall(data.gamecode));
+    const gamedata = await redis.hgetall(data.gamecode);
+    res.json(gamedata);
   } catch (err) {
     console.error(err);
     next(new restify_err.InternalServerError(err.message));
