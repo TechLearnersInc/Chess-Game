@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14
 
 RUN npm install -g nodemon
 RUN npm install -g pm2@latest
