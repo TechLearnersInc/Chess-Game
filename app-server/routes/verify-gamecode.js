@@ -11,6 +11,10 @@ const cookieOptions = {
 
 /* Verify of Gamecode's validity and send JWT Token */
 router.post('/', async (req, res) => {
+  // App local variables
+  const restClient = res.app.locals.restClient;
+  const restEndpoints = res.app.locals.restClientEndpoints;
+
   // Request variables
   let gamecode = req.body.gamecode; // Gamecode
   let player = req.body.player; // Which player
@@ -22,14 +26,14 @@ router.post('/', async (req, res) => {
     playerPinValid: true,
   }; // Assuming that all are valid
 
-  // Redis Variables
-  const redis = req.app.locals.redis;
-  const expiresIn = 86400; /* 86400s = 24h */
-
   // Checking gamecode and pin's validity
   try {
     // Getting data from redis about the Gamecode
-    const gameData = await redis.hgetall(gamecode);
+    const gameData = await getGamedata({
+      client: restClient,
+      endpoint: restEndpoints.get_gamedata,
+      body: { gamecode },
+    });
 
     // Checking gamecode's validity
     if (gameData['gamecode'] === undefined) {
@@ -55,7 +59,11 @@ router.post('/', async (req, res) => {
 
   // Set gamecode's expiring time to 24 hours
   try {
-    await redis.expire(gamecode, expiresIn);
+    await setGamecodeExpiration({
+      client: restClient,
+      endpoint: restEndpoints.set_expire,
+      body: { gamecode, expiresIn: 86400 /* 86400s = 24h */ },
+    });
   } catch (err) {
     console.error(err);
     res.clearCookie('token');
@@ -87,6 +95,26 @@ function getNewToken(
   }
 ) {
   return jwt.sign(data, secret, config);
+}
+
+// Getting Gamedata
+function getGamedata(info) {
+  return new Promise((resolve, reject) => {
+    info.client.post(info.endpoint, info.body, (err, req, res, obj) => {
+      if (err) reject(err);
+      else resolve(obj);
+    });
+  });
+}
+
+// Setting initial expiration
+function setGamecodeExpiration(info) {
+  return new Promise((resolve, reject) => {
+    info.client.post(info.endpoint, info.body, (err, req, res, obj) => {
+      if (err) reject(err);
+      else resolve(res.statusCode);
+    });
+  });
 }
 
 module.exports = router;
