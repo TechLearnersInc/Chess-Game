@@ -1,4 +1,4 @@
-const { io, socketAdapter } = require('../app');
+const { io, socketAdapter } = require('../server');
 const debug = require('debug')('socket-server:server');
 const http = require('http');
 

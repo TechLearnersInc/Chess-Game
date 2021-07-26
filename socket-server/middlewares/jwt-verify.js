@@ -16,7 +16,7 @@ function middleware(socket, next) {
       console.log(`${err.name}: ${err.message}`);
       next(new Error('Not authorized'));
     } else {
-      socket.data['payload'] = payload;
+      socket.locals['payload'] = payload;
       next();
     }
   });

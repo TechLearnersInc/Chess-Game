@@ -1,6 +1,10 @@
 // Module dependencies.
 const socketio = require('socket.io');
 const io = socketio(undefined, require('./config/socketio'));
+const restify = require('restify-clients');
+const restClient = restify.createJsonClient(process.env.REST_API_SERVER);
+const restClientEndpoints = require('./config/rest-client-endpoints');
+
 const Redis = require('ioredis');
 const redis_config = require('./config/redis');
 const redisFuncsClass = require('./redis-funcs');
@@ -21,24 +25,26 @@ const socketAdapter = createAdapter(pubClient, subClient);
 
 // Local Variable
 io.use((socket, next) => {
-  socket.data = {
+  socket.locals = {
     redis,
     redisFuncs,
+    restClient,
+    restClientEndpoints,
   };
   next();
 });
 
 // JWT Verification
-io.use(require('./middleware/jwt-verify'));
+io.use(require('./middlewares/jwt-verify'));
 
 // Gamecode Verification
-io.use(require('./middleware/gamecode-verify'));
+io.use(require('./middlewares/gamecode-verify'));
 
 io.on('connection', async socket => {
-  const payload = socket.data.payload;
+  const payload = socket.locals.payload;
   const gamecode = payload.gamecode;
   const player = payload.player;
-  const redisFuncs = socket.data.redisFuncs;
+  const redisFuncs = socket.locals.redisFuncs;
 
   /*
   // Saved Board State
