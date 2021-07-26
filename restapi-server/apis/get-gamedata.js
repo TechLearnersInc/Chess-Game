@@ -6,7 +6,7 @@ async function getGamedata(req, res, next) {
 
   try {
     const gameData = await redis.hgetall(data.gamecode);
-    if (Object.keys(gameData).length !== 0) res.json(gameData);
+    if (isEmptyObject(gameData)) res.json(gameData);
     else throw new Error("Gamecode doesn't exist or expired");
   } catch (err) {
     console.error(err);
@@ -15,6 +15,10 @@ async function getGamedata(req, res, next) {
   }
 
   next();
+}
+
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0 ? true : false;
 }
 
 module.exports = getGamedata;
