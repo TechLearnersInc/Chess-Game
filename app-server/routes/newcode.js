@@ -33,14 +33,14 @@ router.post('/', async (req, res) => {
     // Creating New gamecode
     await newGamecode({
       client: restClient,
-      endpoint: restEndpoints.new_gamecode,
+      endpoint: restEndpoints.newGamecode,
       body: { gamecode, fields },
     });
 
     // Setting initial expiration
     await setGamecodeExpiration({
       client: restClient,
-      endpoint: restEndpoints.set_expire,
+      endpoint: restEndpoints.setExpire,
       body: { gamecode, expiresIn: 3600 /* 3600s = 1h */ },
     });
   } catch (err) {

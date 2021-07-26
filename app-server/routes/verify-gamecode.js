@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
     // Getting data from redis about the Gamecode
     const gameData = await getGamedata({
       client: restClient,
-      endpoint: restEndpoints.get_gamedata,
+      endpoint: restEndpoints.getGamedata,
       body: { gamecode },
     });
 
@@ -61,7 +61,7 @@ router.post('/', async (req, res) => {
   try {
     await setGamecodeExpiration({
       client: restClient,
-      endpoint: restEndpoints.set_expire,
+      endpoint: restEndpoints.setExpire,
       body: { gamecode, expiresIn: 86400 /* 86400s = 24h */ },
     });
   } catch (err) {
