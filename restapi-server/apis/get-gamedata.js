@@ -5,10 +5,9 @@ async function getGamedata(req, res, next) {
   const data = req.body;
 
   try {
-    const status = await redis.expire(data.gamecode, data.expiresIn);
-    // 0 => Failed and 1 => Success
-    if (status === 0) throw new Error("Gamecode doesn't exist");
-    res.send(200);
+    const gameData = await redis.hgetall(data.gamecode);
+    if (Object.keys(gameData).length !== 0) res.json(gameData);
+    else throw new Error("Gamecode doesn't exist or expired");
   } catch (err) {
     console.error(err);
     next(new restify_err.InternalServerError(err.message));
