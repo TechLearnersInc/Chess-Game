@@ -6,21 +6,16 @@ const restify = require('restify-clients');
 const restifyClient = restify.createJsonClient(process.env.REST_API_SERVER);
 const restifyEndpoints = require('./config/rest-client-endpoints');
 
-const Redis = require('ioredis');
-const redis_config = require('./config/redis');
-const redisFuncsClass = require('./redis-funcs');
-
-// Redis Cache Database
-const redis = new Redis(redis_config.cachedb);
-const redisFuncs = new redisFuncsClass(redis);
+// const redisFuncs = new redisFuncsClass(redis);
 const redisFuncClass = require('./redis-funcs/index');
-const redisFuncs2 = new redisFuncClass({
+const redisFuncs = new redisFuncClass({
   client: restifyClient,
   endpoints: restifyEndpoints,
 });
 
 // Socketio Redis Adapter
-const pubClient = new Redis(redis_config.msg_broker);
+const Redis = require('ioredis');
+const pubClient = new Redis(require('./config/redis'));
 const subClient = pubClient.duplicate();
 const { createAdapter } = require('@socket.io/redis-adapter');
 const socketAdapter = createAdapter(pubClient, subClient);
@@ -32,9 +27,7 @@ const socketAdapter = createAdapter(pubClient, subClient);
 // Local Variable
 io.use((socket, next) => {
   socket.locals = {
-    redis,
     redisFuncs,
-    redisFuncs2,
   };
   next();
 });
@@ -63,7 +56,7 @@ io.on('connection', async socket => {
   // Remove disconnected users
   socket.on('disconnect', async () => {
     try {
-      if (payload) redisFuncs2.setPlayerLefted(gamecode, player);
+      if (payload) redisFuncs.setPlayerLefted(gamecode, player);
     } catch (err) {
       console.error(err);
     }

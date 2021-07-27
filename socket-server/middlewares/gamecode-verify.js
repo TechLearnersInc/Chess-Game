@@ -8,9 +8,9 @@ async function middleware(socket, next) {
 
   // Getting gamadata
   try {
-    gamedata = await redisFuncs.getGameData(gamecode);
+    gamedata = await redisFuncs.getGamedata(gamecode);
   } catch (err) {
-    console.err(err);
+    console.error(err);
     next(new Error('Internal Server Error'));
     return;
   }

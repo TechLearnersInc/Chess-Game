@@ -5,6 +5,8 @@ class index {
     this.endpoints = config.endpoints;
 
     // Methods
+    this.getGamedata = require('./getGamedata');
+    this.setPlayerJoined = require('./setPlayerJoined');
     this.setPlayerLefted = require('./setPlayerLefted');
   }
 }
