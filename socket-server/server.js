@@ -6,7 +6,7 @@ const restify = require('restify-clients');
 const restifyClient = restify.createJsonClient(process.env.REST_API_SERVER);
 const restifyEndpoints = require('./config/rest-client-endpoints');
 
-// const redisFuncs = new redisFuncsClass(redis);
+// Redis Functions REST API
 const redisFuncClass = require('./redis-funcs/index');
 const redisFuncs = new redisFuncClass({
   client: restifyClient,
