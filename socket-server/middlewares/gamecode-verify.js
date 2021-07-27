@@ -25,7 +25,14 @@ async function middleware(socket, next) {
   if (gamedata[`${player}_joined`] === 'true') {
     next(new Error('Already joined in one device'));
     return;
-  } else await redisFuncs.setPlayerJoined(gamecode, player);
+  } else
+    try {
+      await redisFuncs.setPlayerJoined(gamecode, player);
+    } catch (err) {
+      console.error(err);
+      next(new Error('Internal Server Error'));
+      return;
+    }
 
   // Verified
   next();
