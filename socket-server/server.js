@@ -53,6 +53,14 @@ io.on('connection', async socket => {
   };
   */
 
+  socket.join(gamecode);
+
+  io.in(gamecode).emit('move', {
+    hello: 'Asuna Yuuki',
+    gamecode,
+    player,
+  });
+
   // Remove disconnected users
   socket.on('disconnect', async () => {
     try {
