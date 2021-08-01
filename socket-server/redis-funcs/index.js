@@ -5,7 +5,8 @@ class index {
     this.endpoints = config.endpoints;
 
     // Methods
-    this.setFen = require('./getFen');
+    this.getFen = require('./getFen');
+    this.setFen = require('./setFen');
     this.getGamedata = require('./getGamedata');
     this.getCurrentTurn = require('./getCurrentTurn');
     this.setPlayerJoined = require('./setPlayerJoined');
