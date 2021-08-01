@@ -53,25 +53,32 @@ socket.on('connect_error', err => {
   setTimeout(() => window.location.replace('/'), 3 * 1000 /* 3 second */);
 });
 
-// Receive move from server
-socket.on('move', async message => {
+// Initialize board
+socket.on('initialize_board', message => {
+  socket.locals = {
+    chess_game: new CHESS_BOARD({
+      div_id: chessBoardID.id,
+      localPlayer: message.player,
+    }),
+  };
   console.log(message);
-  const chess_game = new CHESS_BOARD({
-    div_id: chessBoardID.id,
-    localPlayer: 'black',
-  });
-  chess_game.setBoardFreeze(false);
-  let old_fen = chess_game.getFen();
+});
 
-  let ok = setInterval(() => {
-    const new_fen = old_fen !== chess_game.getFen();
-    console.log(new_fen);
-    if (new_fen) {
-      console.log(chess_game.getFen());
-      chess_game.setBoardFreeze(true);
-      clearInterval(ok);
-    }
-  }, 50);
+// Receive move from server
+socket.on('move', message => {
+  const chess_game = socket.locals.chess_game;
+  const gameEvents = chess_game.gameEvents;
+  console.log(message);
+
+  if (message.player !== chess_game.localPlayer) {
+    chess_game.setBoardFreeze(false);
+    chess_game.setFen(message.fen);
+  }
+
+  gameEvents.addEventListener('localMove', event => {
+    socket.emit('move', chess_game.localPlayer, event.detail.fen);
+    chess_game.setBoardFreeze(true);
+  });
 });
 
 // On disconnect

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Refrence: https://chessboardjs.com/examples.html#5003
+ * Reference: https://chessboardjs.com/examples.html#5003
  */
 
 class CHESS_BOARD {
@@ -10,6 +10,7 @@ class CHESS_BOARD {
     this.localPlayer = config.localPlayer;
     this.board = null;
     this.game = null;
+    this.gameEvents = null;
     this.defaultFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     this.initialize_board();
   }
@@ -21,7 +22,6 @@ class CHESS_BOARD {
     const game = new Chess();
     const whiteSquareGrey = '#a9a9a9';
     const blackSquareGrey = '#696969';
-    const freezeBoardKey = this.freezeBoardKey;
     const board = Chessboard(div_id, {
       draggable: true,
       orientation: gameTurn,
@@ -35,11 +35,13 @@ class CHESS_BOARD {
     game.load(defaultFen);
     game.setTurn(gameTurn);
     game.freeze_board = true;
+    game.custom_event_target = new EventTarget();
     board.position(defaultFen, true);
     window.addEventListener('resize', board.resize);
 
     this.board = board;
     this.game = game;
+    this.gameEvents = game.custom_event_target;
 
     function removeGreySquares() {
       $('#chess-board .square-55d63').css('background', '');
@@ -110,6 +112,12 @@ class CHESS_BOARD {
 
       const fen = game.fen();
       board.position(fen, true);
+
+      game.custom_event_target.dispatchEvent(
+        new CustomEvent('localMove', {
+          detail: { fen },
+        })
+      );
     }
   }
 

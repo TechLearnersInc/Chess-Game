@@ -44,21 +44,47 @@ io.on('connection', async socket => {
   const player = payload.player;
   const redisFuncs = socket.locals.redisFuncs;
 
-  /*
-  // Saved Board State
-  const boardState = {
-    fen: gameData.fen,
-    player: player,
-    freeze: gameData.turn === player ? false : true,
-  };
-  */
-
+  // Joining
   socket.join(gamecode);
 
-  io.in(gamecode).emit('move', {
-    hello: 'Asuna Yuuki',
+  // Initialize
+  socket.emit('initialize_board', {
     gamecode,
     player,
+  });
+
+  io.in(gamecode).emit('move', {
+    gamecode,
+    player,
+    fen: (await redisFuncs.getFen(gamecode)).fen,
+    turn: (await redisFuncs.getCurrentTurn(gamecode)).turn,
+  });
+
+  socket.on('move', async (player, fen) => {
+    try {
+      const current_turn = (await redisFuncs.getCurrentTurn(gamecode)).turn;
+      if (current_turn !== player) {
+        console.log(`Invalid move according to turn, (gamecode: ${gamecode}, player: ${player})`);
+        return;
+      }
+      await redisFuncs.setFen(gamecode, fen);
+      await redisFuncs.setPlayerTurn(gamecode, current_turn === 'white' ? 'black' : 'white');
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+
+    try {
+      io.in(gamecode).emit('move', {
+        gamecode,
+        player,
+        fen: (await redisFuncs.getFen(gamecode)).fen,
+        turn: (await redisFuncs.getCurrentTurn(gamecode)).turn,
+      });
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   });
 
   // Remove disconnected users

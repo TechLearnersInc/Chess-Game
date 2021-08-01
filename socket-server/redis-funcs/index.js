@@ -8,6 +8,7 @@ class index {
     this.getFen = require('./getFen');
     this.setFen = require('./setFen');
     this.getGamedata = require('./getGamedata');
+    this.setPlayerTurn = require('./setPlayerTurn');
     this.getCurrentTurn = require('./getCurrentTurn');
     this.setPlayerJoined = require('./setPlayerJoined');
     this.setPlayerLefted = require('./setPlayerLefted');
