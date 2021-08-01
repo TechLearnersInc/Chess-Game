@@ -5,6 +5,7 @@ module.exports = {
   setPlayerLefted: '/set-player-lefted',
   setPlayerJoined: '/set-player-joined',
   setPlayerTurn: '/set-player-turn',
+  getFen: '/get-fen',
   setFen: '/set-fen',
   getPlayerJoinDetails: '/get-player-join-details',
   getCurrentTurn: '/get-current-turn',
