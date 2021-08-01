@@ -14,7 +14,7 @@
   "homepage": "https://github.com/TechLearnersInc/Chess-Game",
   "dependencies": {
     "debug": "^4.3.2",
-    "ioredis": "^4.27.6",
+    "ioredis": "^4.27.7",
     "morgan": "^1.10.0",
     "restify": "^8.5.1",
     "restify-errors": "^8.0.2"
