@@ -61,14 +61,21 @@ io.on('connection', async socket => {
   });
 
   socket.on('move', async (player, fen) => {
+    let current_turn;
+    let next_turn;
+
     try {
-      const current_turn = (await redisFuncs.getCurrentTurn(gamecode)).turn;
-      if (current_turn !== player) {
-        console.log(`Invalid move according to turn, (gamecode: ${gamecode}, player: ${player})`);
-        return;
-      }
+      current_turn = (await redisFuncs.getCurrentTurn(gamecode)).turn;
+      if (current_turn !== player) return;
+      else next_turn = current_turn === 'white' ? 'black' : 'white';
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+
+    try {
       await redisFuncs.setFen(gamecode, fen);
-      await redisFuncs.setPlayerTurn(gamecode, current_turn === 'white' ? 'black' : 'white');
+      await redisFuncs.setPlayerTurn(gamecode, next_turn);
     } catch (err) {
       console.error(err);
       throw err;

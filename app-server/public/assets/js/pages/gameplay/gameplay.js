@@ -73,6 +73,11 @@ socket.on('move', message => {
   if (message.player !== chess_game.localPlayer) {
     chess_game.setBoardFreeze(false);
     chess_game.setFen(message.fen);
+    notification({
+      title: 'Your Turn!',
+      text: "It's your time to make an intelligent move.",
+      action: 'show',
+    });
   }
 
   gameEvents.addEventListener('localMove', event => {
