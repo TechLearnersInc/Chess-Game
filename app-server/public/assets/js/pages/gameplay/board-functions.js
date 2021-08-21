@@ -60,7 +60,11 @@ class CHESS_BOARD {
       if (game.freeze_board) return false;
 
       // do not pick up pieces if the game is over
-      if (game.game_over()) return false;
+      if (game.game_over()) {
+        const game_over_custom_event = new CustomEvent('gameOver', {});
+        game.custom_event_target.dispatchEvent(game_over_custom_event);
+        return false;
+      }
 
       // or if it's not that side's turn
       if (
@@ -68,6 +72,10 @@ class CHESS_BOARD {
         (game.turn() === 'b' && piece.search(/^w/) !== -1)
       )
         return false;
+      else {
+        const checkmate_custom_event = new CustomEvent('checkmate', {});
+        game.custom_event_target.dispatchEvent(checkmate_custom_event);
+      }
     }
 
     function onDrop(source, target) {

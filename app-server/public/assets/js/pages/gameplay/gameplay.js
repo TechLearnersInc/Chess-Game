@@ -92,6 +92,22 @@ socket.on('move', message => {
     socket.emit('move', chess_game.localPlayer, event.detail.fen);
     chess_game.setBoardFreeze(true);
   });
+
+  gameEvents.addEventListener('checkmate', event => {
+    notification({
+      title: 'Checkmate!',
+      text: "You've got a checkmate to deal with.",
+      action: 'show',
+    });
+  });
+
+  gameEvents.addEventListener('gameOver', event => {
+    notification({
+      title: 'Game over!',
+      text: 'Unfortunately you lost the game.',
+      action: 'show',
+    });
+  });
 });
 
 // On disconnect
