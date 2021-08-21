@@ -70,12 +70,20 @@ socket.on('move', message => {
   const gameEvents = chess_game.gameEvents;
   console.log(message);
 
-  if (message.player !== chess_game.localPlayer) {
+  if (message.turn === chess_game.localPlayer) {
     chess_game.setBoardFreeze(false);
     chess_game.setFen(message.fen);
     notification({
       title: 'Your Turn!',
       text: "It's your time to make an intelligent move.",
+      action: 'show',
+    });
+  } else {
+    chess_game.setBoardFreeze(true);
+    chess_game.setFen(message.fen);
+    notification({
+      title: "Opponent's Turn!",
+      text: "It's your opponent's time to make an intelligent move.",
       action: 'show',
     });
   }
