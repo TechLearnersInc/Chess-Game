@@ -5,7 +5,8 @@ async function setGameover(req, res, next) {
   const data = req.body;
 
   try {
-    await redis.hset(data.gamecode, 'gameover', data.gameover);
+    const gameover = data.gameover.toString();
+    await redis.hset(data.gamecode, 'gameover', gameover);
     res.send(200);
   } catch (err) {
     console.error(err);

@@ -102,6 +102,7 @@ socket.on('move', message => {
   });
 
   gameEvents.addEventListener('gameover', event => {
+    socket.emit('gameover');
     notification({
       title: 'Game over!',
       text: 'Unfortunately you lost the game.',
