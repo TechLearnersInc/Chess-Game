@@ -88,11 +88,13 @@ socket.on('move', message => {
     });
   }
 
+  // Local player move
   gameEvents.addEventListener('localmove', event => {
     socket.emit('move', chess_game.localPlayer, event.detail.fen);
     chess_game.setBoardFreeze(true);
   });
 
+  // Check
   gameEvents.addEventListener('check', event => {
     notification({
       title: 'Check!',
@@ -101,20 +103,22 @@ socket.on('move', message => {
     });
   });
 
-  gameEvents.addEventListener('gameover', event => {
-    socket.emit('gameover');
-    notification({
-      title: 'Game over!',
-      text: 'Unfortunately you lost the game.',
-      action: 'show',
-    });
-  });
-
+  // Draw
   gameEvents.addEventListener('draw', event => {
     socket.emit('gameover');
     notification({
       title: 'Draw!',
       text: 'Unfortunately the game is in draw.',
+      action: 'show',
+    });
+  });
+
+  // Gameover
+  gameEvents.addEventListener('gameover', event => {
+    socket.emit('gameover');
+    notification({
+      title: 'Game over!',
+      text: 'Unfortunately you lost the game.',
       action: 'show',
     });
   });
