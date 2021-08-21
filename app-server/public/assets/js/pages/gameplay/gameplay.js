@@ -88,7 +88,7 @@ socket.on('move', message => {
     });
   }
 
-  gameEvents.addEventListener('localMove', event => {
+  gameEvents.addEventListener('localmove', event => {
     socket.emit('move', chess_game.localPlayer, event.detail.fen);
     chess_game.setBoardFreeze(true);
   });
@@ -101,7 +101,7 @@ socket.on('move', message => {
     });
   });
 
-  gameEvents.addEventListener('gameOver', event => {
+  gameEvents.addEventListener('gameover', event => {
     notification({
       title: 'Game over!',
       text: 'Unfortunately you lost the game.',

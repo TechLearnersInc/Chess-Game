@@ -61,7 +61,7 @@ class CHESS_BOARD {
 
       // do not pick up pieces if the game is over
       if (game.game_over()) {
-        const game_over_custom_event = new CustomEvent('gameOver', {});
+        const game_over_custom_event = new CustomEvent('gameover', {});
         game.custom_event_target.dispatchEvent(game_over_custom_event);
         return false;
       }
@@ -122,7 +122,7 @@ class CHESS_BOARD {
       board.position(fen, true);
 
       game.custom_event_target.dispatchEvent(
-        new CustomEvent('localMove', {
+        new CustomEvent('localmove', {
           detail: { fen },
         })
       );
