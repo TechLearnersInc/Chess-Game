@@ -7,6 +7,8 @@ module.exports = {
   setPlayerTurn: '/set-player-turn',
   getFen: '/get-fen',
   setFen: '/set-fen',
+  getGameover: '/get-gameover',
+  setGameover: '/set-gameover',
   getPlayerJoinDetails: '/get-player-join-details',
   getCurrentTurn: '/get-current-turn',
   checkIfThisPlayerTurn: '/check-if-this-player-turn',

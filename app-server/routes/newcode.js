@@ -26,6 +26,7 @@ router.post('/', async (req, res) => {
     ...['black_pin', 'false'],
     ...['fen', 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'],
     ...['turn', 'white'],
+    ...['gameover', 'false'],
   ];
 
   // Actions
