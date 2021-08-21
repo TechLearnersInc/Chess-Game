@@ -6,7 +6,7 @@ async function middleware(socket, next) {
   const redisFuncs = socket.locals.redisFuncs;
   let gamedata;
 
-  // Getting gamadata
+  // Getting gamedata
   try {
     gamedata = await redisFuncs.getGamedata(gamecode);
   } catch (err) {
