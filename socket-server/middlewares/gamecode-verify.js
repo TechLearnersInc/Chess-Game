@@ -35,6 +35,12 @@ async function middleware(socket, next) {
     }
   }
 
+  // Verifying gameover or not
+  if (gamedata.gameover === 'true') {
+    next(new Error('Games is already over'));
+    return;
+  }
+
   // Verified
   next();
 }

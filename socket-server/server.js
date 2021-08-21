@@ -94,6 +94,16 @@ io.on('connection', async socket => {
     }
   });
 
+  // Gameover
+  socket.on('gameover', async () => {
+    try {
+      await redisFuncs.setGameover(gamecode, true);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  });
+
   // Remove disconnected users
   socket.on('disconnect', async () => {
     try {
