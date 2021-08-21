@@ -59,11 +59,24 @@ class CHESS_BOARD {
     function onDragStart(source, piece) {
       if (game.freeze_board) return false;
 
+      // do not pick up pieces if the game is draw
+      if (game.in_draw()) {
+        const game_draw_custom_event = new CustomEvent('draw', {});
+        game.custom_event_target.dispatchEvent(game_draw_custom_event);
+        return false;
+      }
+
       // do not pick up pieces if the game is over
       if (game.game_over()) {
         const game_over_custom_event = new CustomEvent('gameover', {});
         game.custom_event_target.dispatchEvent(game_over_custom_event);
         return false;
+      }
+
+      // if in check
+      if (game.in_check()) {
+        const check_custom_event = new CustomEvent('check', {});
+        game.custom_event_target.dispatchEvent(check_custom_event);
       }
 
       // or if it's not that side's turn
@@ -72,10 +85,6 @@ class CHESS_BOARD {
         (game.turn() === 'b' && piece.search(/^w/) !== -1)
       )
         return false;
-      else {
-        const checkmate_custom_event = new CustomEvent('checkmate', {});
-        game.custom_event_target.dispatchEvent(checkmate_custom_event);
-      }
     }
 
     function onDrop(source, target) {

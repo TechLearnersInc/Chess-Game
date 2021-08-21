@@ -93,10 +93,10 @@ socket.on('move', message => {
     chess_game.setBoardFreeze(true);
   });
 
-  gameEvents.addEventListener('checkmate', event => {
+  gameEvents.addEventListener('check', event => {
     notification({
-      title: 'Checkmate!',
-      text: "You've got a checkmate to deal with.",
+      title: 'Check!',
+      text: "You've got a check to deal with.",
       action: 'show',
     });
   });
@@ -106,6 +106,15 @@ socket.on('move', message => {
     notification({
       title: 'Game over!',
       text: 'Unfortunately you lost the game.',
+      action: 'show',
+    });
+  });
+
+  gameEvents.addEventListener('draw', event => {
+    socket.emit('gameover');
+    notification({
+      title: 'Draw!',
+      text: 'Unfortunately the game is in draw.',
       action: 'show',
     });
   });
