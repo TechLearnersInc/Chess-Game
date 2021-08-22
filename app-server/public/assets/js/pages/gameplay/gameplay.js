@@ -1,9 +1,14 @@
 'use strict';
 
 const chessBoardID = document.getElementById('chess-board');
-const modalConfirmID = document.getElementById('modalConfirm');
-const modalConfirmNoID = document.getElementById('modalConfirmNo');
-const modalConfirmYesID = document.getElementById('modalConfirmYes');
+const modalPinCodeID = document.getElementById('modalPinCode');
+const modalPinCode = new bootstrap.Modal(modalPinCodeID, { keyboard: false });
+const modalSendMessageID = document.getElementById('modalSendMessage');
+const modalSendMessage = new bootstrap.Modal(modalSendMessageID, { keyboard: false });
+const showPinCode = document.getElementById('showPinCode');
+const sendMessage = document.getElementById('sendMessage');
+const sendMessageNow = document.getElementById('sendMessageNow');
+const joinGamePinCode = document.getElementById('joinGamePinCode');
 const notificationToastID = document.getElementById('notificationToast');
 const notificationToastTitle = document.getElementById('notificationToastTitle');
 const notificationToastText = document.getElementById('notificationToastText');
@@ -12,6 +17,7 @@ const notificationToast = new bootstrap.Toast(notificationToastID, {
   autohide: true,
   delay: 5000,
 });
+
 const socket = io({
   path: '/gameserver',
   transports: ['websocket'],
@@ -19,7 +25,6 @@ const socket = io({
   reconnectionAttempts: 20,
   reconnectionDelayMax: 5000,
 });
-
 notificationToastID.addEventListener('show.bs.toast', () => {
   notificationToastID.classList.add('animate__animated');
   notificationToastID.classList.add('animate__fadeInDown');

@@ -16,9 +16,7 @@ const notificationToastTitle = document.getElementById('notificationToastTitle')
 const notificationToastText = document.getElementById('notificationToastText');
 const modalJoinGameID = document.getElementById('modalJoinGame');
 const modalJoinGameTitle = document.getElementById('modalJoinGameTitle');
-const modalJoinGame = new bootstrap.Modal(modalJoinGameID, {
-  keyboard: false,
-});
+const modalJoinGame = new bootstrap.Modal(modalJoinGameID, { keyboard: false });
 const notificationToast = new bootstrap.Toast(notificationToastID, {
   animation: true,
   autohide: true,
@@ -50,10 +48,6 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
 setTimeout(() => {
   localStorage.clear();
 }, 1000 /* 1 Second */);
-
-setTimeout(() => {
-  console.log(prompt("What's your name?"));
-}, 5000);
 
 btnNewGame.addEventListener('click', async event => {
   event.preventDefault();
