@@ -9,6 +9,8 @@ const showPinCode = document.getElementById('showPinCode');
 const sendMessage = document.getElementById('sendMessage');
 const sendMessageNow = document.getElementById('sendMessageNow');
 const joinGamePinCode = document.getElementById('joinGamePinCode');
+const opponentPlayerMsgRow = document.getElementById('opponentPlayerMsgRow');
+const opponentPlayerMsg = document.getElementById('opponentPlayerMsg');
 const notificationToastID = document.getElementById('notificationToast');
 const notificationToastTitle = document.getElementById('notificationToastTitle');
 const notificationToastText = document.getElementById('notificationToastText');
@@ -25,6 +27,7 @@ const socket = io({
   reconnectionAttempts: 20,
   reconnectionDelayMax: 5000,
 });
+
 notificationToastID.addEventListener('show.bs.toast', () => {
   notificationToastID.classList.add('animate__animated');
   notificationToastID.classList.add('animate__fadeInDown');
