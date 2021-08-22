@@ -23,7 +23,7 @@ async function middleware(socket, next) {
 
   // Verifying already joined or not
   if (gamedata[`${player}_joined`] === 'true') {
-    // next(new Error('Already joined in one device'));
+    next(new Error('Already joined in one device'));
     return;
   } else {
     try {
