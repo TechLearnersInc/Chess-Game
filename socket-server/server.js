@@ -116,6 +116,17 @@ io.on('connection', async socket => {
     }
   });
 
+  // Pincode
+  socket.on('pincode-request', async player => {
+    try {
+      const playerPin = await redisFuncs.newPlayerPin(gamecode, player);
+      socket.emit('recv-pincode', playerPin);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  });
+
   // Remove disconnected users
   socket.on('disconnect', async () => {
     try {

@@ -51,6 +51,16 @@ sendMessage.addEventListener('click', event => {
   modalSendMessage.show();
 });
 
+showPinCode.addEventListener('click', event => {
+  event.preventDefault();
+  try {
+    const chess_game = socket.locals.chess_game;
+    socket.emit('pincode-request', chess_game.localPlayer);
+  } catch (err) {
+    throw error;
+  }
+});
+
 /**
  * Socketio
  */
@@ -167,6 +177,12 @@ socket.on('recv-message', message => {
   opponentPlayerMsg.textContent = message.trim();
   userTextMessage.value = '';
   modalSendMessage.show();
+});
+
+// Pincode
+socket.on('recv-pincode', obj => {
+  joinGamePinCode.value = obj.playerPin;
+  modalPinCode.show();
 });
 
 // On disconnect
