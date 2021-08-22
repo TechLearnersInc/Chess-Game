@@ -28,6 +28,8 @@ server.post('/set-fen', require('./apis/set-fen'));
 server.post('/get-fen', require('./apis/get-fen'));
 server.post('/set-gameover', require('./apis/set-gameover'));
 server.post('/get-gameover', require('./apis/get-gameover'));
+server.post('/get-player-pin', require('./apis/get-player-pin'));
+server.post('/new-player-pin', require('./apis/new-player-pin'));
 server.post('/get-player-join-details', require('./apis/get-player-join-details'));
 server.post('/get-current-turn', require('./apis/get-current-turn'));
 server.post('/check-if-this-player-turn', require('./apis/check-if-this-player-turn'));
