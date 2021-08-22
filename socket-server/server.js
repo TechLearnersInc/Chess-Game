@@ -53,6 +53,7 @@ io.on('connection', async socket => {
     player,
   });
 
+  // Move
   io.in(gamecode).emit('move', {
     gamecode,
     player,
@@ -108,7 +109,6 @@ io.on('connection', async socket => {
   // Message
   socket.on('send-message', async message => {
     try {
-      console.log(message);
       io.to(gamecode).except(socket.id).emit('recv-message', message);
     } catch (err) {
       console.error(err);
