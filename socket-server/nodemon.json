@@ -1,6 +1,5 @@
 {
   "watch": ["."],
   "verbose": false,
-  "ignore": ["node_modules/", ".git/"],
-  "delay": "1000"
+  "ignore": ["node_modules/", ".git/"]
 }
