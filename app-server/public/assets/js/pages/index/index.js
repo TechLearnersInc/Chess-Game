@@ -49,8 +49,11 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
 // Initial gamecode clear
 setTimeout(() => {
   localStorage.clear();
-  sessionStorage.clear();
 }, 1000 /* 1 Second */);
+
+setTimeout(() => {
+  console.log(prompt("What's your name?"));
+}, 5000);
 
 btnNewGame.addEventListener('click', async event => {
   event.preventDefault();
