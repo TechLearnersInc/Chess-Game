@@ -11,6 +11,7 @@ const sendMessageNow = document.getElementById('sendMessageNow');
 const joinGamePinCode = document.getElementById('joinGamePinCode');
 const opponentPlayerMsgRow = document.getElementById('opponentPlayerMsgRow');
 const opponentPlayerMsg = document.getElementById('opponentPlayerMsg');
+const userTextMessage = document.getElementById('userTextMessage');
 const notificationToastID = document.getElementById('notificationToast');
 const notificationToastTitle = document.getElementById('notificationToastTitle');
 const notificationToastText = document.getElementById('notificationToastText');
@@ -42,6 +43,12 @@ notificationToastID.addEventListener('hidden.bs.toast', () => {
   notificationToastID.classList.remove('animate__animated');
   notificationToastID.classList.remove('animate__fadeInDown');
   notificationToastID.classList.remove('animate__fadeOutUp');
+});
+
+sendMessage.addEventListener('click', event => {
+  event.preventDefault();
+  opponentPlayerMsgRow.hidden = true;
+  modalSendMessage.show();
 });
 
 /**
@@ -130,6 +137,36 @@ socket.on('move', message => {
       action: 'show',
     });
   });
+});
+
+// Send Message
+sendMessageNow.addEventListener('click', event => {
+  event.preventDefault();
+  try {
+    const message = userTextMessage.value;
+    socket.emit('send-message', message.trim());
+  } catch (err) {
+    notification({
+      title: 'Status',
+      text: 'Message send unsuccessfully.',
+      action: 'show',
+    });
+    throw err;
+  }
+  modalSendMessage.hide();
+  notification({
+    title: 'Status',
+    text: 'Message send successfully.',
+    action: 'show',
+  });
+});
+
+// Receive Message
+socket.on('recv-message', message => {
+  opponentPlayerMsgRow.hidden = false;
+  opponentPlayerMsg.textContent = message.trim();
+  userTextMessage.value = '';
+  modalSendMessage.show();
 });
 
 // On disconnect

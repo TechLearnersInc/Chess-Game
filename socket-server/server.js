@@ -60,6 +60,7 @@ io.on('connection', async socket => {
     turn: (await redisFuncs.getCurrentTurn(gamecode)).turn,
   });
 
+  // Move
   socket.on('move', async (player, fen) => {
     let current_turn;
     let next_turn;
@@ -98,6 +99,17 @@ io.on('connection', async socket => {
   socket.on('gameover', async () => {
     try {
       await redisFuncs.setGameover(gamecode, true);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  });
+
+  // Message
+  socket.on('send-message', async message => {
+    try {
+      console.log(message);
+      io.to(gamecode).except(socket.id).emit('recv-message', message);
     } catch (err) {
       console.error(err);
       throw err;
