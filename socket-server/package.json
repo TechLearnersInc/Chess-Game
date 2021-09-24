@@ -24,7 +24,7 @@
     "socket.io": "^4.2.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.13"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"
