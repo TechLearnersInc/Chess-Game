@@ -16,8 +16,8 @@
     "debug": "^4.3.2",
     "ioredis": "^4.27.9",
     "morgan": "^1.10.0",
-    "nanoid": "^3.1.25",
-    "restify": "^8.5.1",
+    "nanoid": "^3.1.28",
+    "restify": "^8.6.0",
     "restify-errors": "^8.0.2"
   },
   "devDependencies": {

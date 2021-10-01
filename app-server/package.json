@@ -16,7 +16,7 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.10.0",
-    "nanoid": "^3.1.25",
+    "nanoid": "^3.1.28",
     "restify-clients": "^3.1.0"
   },
   "devDependencies": {
